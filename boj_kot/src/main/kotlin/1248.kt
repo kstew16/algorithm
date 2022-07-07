@@ -1,13 +1,13 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+
 fun main() {
     val br = BufferedReader(InputStreamReader(System.`in`))
     val n = br.readLine().toInt()
     var inputArray = br.readLine().split("")
     inputArray = inputArray.subList(1,inputArray.size-1)
-
-
+    br.close()
 
     var offset = 0
     val signTable = Array(n){
@@ -28,90 +28,58 @@ fun main() {
         }
     condition.forEach{it.reverse()}
 
-    fun checkCondition(list: MutableList<Int>): Boolean {
-            for(i in 0 until n){
-                var subSum = 0
-                for(j in  0 until n){
-                    var currentSign = signTable[j][i]
-                    if(currentSign != "X"){
-                        subSum = list.subList(j,i+1).sum()
-                        if(!((subSum<0 && currentSign == "-")||(subSum>0 && currentSign == "+")||(subSum==0 && currentSign == "0")))
-                            return false
-                    }
-                }
-            }
-        return true
+    fun subSum(list:MutableList<Int>, index:Int):Int {
+        val size = list.size
+        var sum = 0
+        for(i in size - index until size){
+            sum+=list[i]
+        }
+        return sum
     }
 
     val stack = mutableListOf<Int>()
     var ans = ""
     fun dfs(depth:Int) {
-        if(depth == n){
-            if(ans == ""){
+        if(ans != "") return
+        else if(depth == n){
+            if(ans==""){
                 ans = stack.joinToString(" ")
                 println(ans)
                 return
             }
-            if(!checkCondition(stack))
-                println(stack.joinToString { "aaa" })
         }
         else{
-            //if(ans == ""){
-            if(true){
-                val currentConditions = condition[depth]
-                val possibilities = mutableListOf<Int>()
-                for(i in 0 until currentConditions.size){
-                    when(i){
-                        0 -> {
-                            when(currentConditions[i]){
-                                "+" ->  {
-                                    for(i in 1..10)
-                                        possibilities.add(i)
-                                }
-                                "-" ->  {
-                                    for(i in -10..-1)
-                                        possibilities.add(i)
-                                }
-                                else -> {
-                                    possibilities.add(0)
-                                    break
-                                }
-                            }
-                        }
-                        else -> {
-                            val subSum = stack.subList(stack.size-i,stack.size).sum()
-                            when(currentConditions[i]){
-                                "+" ->  {
-                                    possibilities.removeAll{
-                                        it + subSum <= 0
-                                    }
-                                }
-                                "-" ->  {
-                                    possibilities.removeAll{
-                                        it + subSum >= 0
-                                    }
-                                }
-                                else -> {
-                                    if(possibilities != (mutableListOf(0))) {
-                                        possibilities.clear()
-                                        if(subSum<=10) {
-                                            possibilities.add(-subSum)
-                                        }
-                                    }
-                                }
+            val currentConditions = condition[depth]
+            val possibilities = mutableListOf<Int>()
+            for(i in 0 until currentConditions.size){
+                when(i){
+                    0 -> {
+                        when(currentConditions[i]){
+                            "+" -> possibilities.addAll(1..10)
+                            "-" -> possibilities.addAll(-10..-1)
+                            else -> {
+                                possibilities.add(0)
+                                break
                             }
                         }
                     }
+                    else -> {
+                        val subSum = subSum(stack,i)
+                        when(currentConditions[i]){
+                            "+" ->  possibilities.removeAll{it + subSum <= 0}
+                            "-" ->  possibilities.removeAll{it + subSum >= 0}
+                            else -> possibilities.removeAll{it + subSum != 0 }
+                        }
+                    }
                 }
-                possibilities.forEach{
-                    stack.add(it)
-                    dfs(depth+1)
-                    stack.removeAt(stack.size-1)
-                }
+            }
+            possibilities.forEach{
+                stack.add(it)
+                dfs(depth+1)
+                stack.removeAt(stack.size-1)
             }
         }
     }
 
     dfs(0)
-    br.close()
 }
