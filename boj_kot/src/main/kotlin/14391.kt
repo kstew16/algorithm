@@ -8,98 +8,68 @@ fun main(){
     val br = BufferedReader(InputStreamReader(System.`in`))
     val (col, row) = br.readLine().split(" ").map{it.toInt()}
     val maxDepth = col*row
-    var stringBuilder = ""
+    var input = ""
     for(i in 0 until col){
-        stringBuilder += br.readLine()
+        input += br.readLine()
     }
-    val tableArray = (stringBuilder.split("").subList(1,maxDepth+1)).map { it.toInt() }.toIntArray()
-    var indexVisited = 0
-    val stack = mutableListOf<Int>()
+    val tableArray = (input.split("").subList(1,maxDepth+1))
+    var bitUsage = 0
     var maxSum = 0
 
-    val NOTHING = 0
-    val HORIZONTAL = 1
-    val VERTICAL = 2
 
-    fun visit(target:Int, direction:Int, lastSum:Int){
-        // 1. 스택에 뭔가 들어 있으면 끊고 갈 수 있음
-        if(stack.size>0){
-            // 끊고 가는 경우 어디로든지 갈 수 있는데, 스택이 sum 으로 치환돼서 들어감.
-            var localSum = lastSum + stack.joinToString("").toInt()
-            if(!(indexVisited chk target+1) && target + 1 < maxDepth && (target + 1) % row != 0 ){
-                // 오른쪽 블럭이 방문되지 않았고, 존재할 때
-                // 스택 백업
-                var tmp = mutableListOf<Int>()
-                stack.forEach {
-                    tmp.add(it)
-                }
-                stack.clear()
-                stack.add(tableArray[target])
-                indexVisited = indexVisited on target
-                visit(target+1,HORIZONTAL,localSum)
-                stack.removeAt(stack.size - 1)
-                indexVisited = indexVisited off target
-                tmp.forEach{
-                    stack.add(it)
+    fun getSumOfBits():Int{
+        var stringBuilder = ""
+        var sum = 0
+        for(y in 0 until col){
+            for(x in 0 until row){
+                val index = y * row + x
+                stringBuilder += if(bitUsage chk index){
+                    tableArray[index]
+                } else{
+                    " "
                 }
             }
-            if(!(indexVisited chk target+row) && target + row < maxDepth){
-                var tmp = mutableListOf<Int>()
-                stack.forEach {
-                    tmp.add(it)
-                }
-                stack.clear()
-                stack.add(tableArray[target])
-                indexVisited = indexVisited on target
-                visit(target+row,VERTICAL,localSum)
-                stack.removeAt(stack.size - 1)
-                indexVisited = indexVisited off target
-                tmp.forEach{
-                    stack.add(it)
+            var numList = stringBuilder.split(" ")
+            numList.forEach{
+                if(it != ""){
+                    sum += it.toInt()
                 }
             }
+            stringBuilder = ""
         }
-
-        stack.add(tableArray[target])
-        indexVisited = indexVisited on target
-        if(indexVisited == ((1 shl maxDepth) - 1)){
-            // 모든 블럭이 방문 상태이면 마무리하고 합 계산
-            var localSum = lastSum + stack.joinToString("").toInt()
-            maxSum = if(maxSum<localSum) localSum else maxSum
-            //return
+        for(x in 0 until row){
+            for(y in 0 until col){
+                val index = y * row + x
+                stringBuilder += if(!(bitUsage chk index)){
+                    tableArray[index]
+                } else{
+                    " "
+                }
+            }
+            var numList = stringBuilder.split(" ")
+            numList.forEach{
+                if(it != ""){
+                    sum += it.toInt()
+                }
+            }
+            stringBuilder = ""
         }
-
-        // 2. 확장 블럭 선정 - 방향을 계승하고, 블럭 유효성을 검사
-        // 블럭을 끊지 않고 (스택을 sum 으로 치환하지 않고) 진행하는 경우에는 전 블럭이 진행하던 방향이 중요
-        when(direction){
-            NOTHING ->{
-                // 새로운 블럭이 시작된 경우 어디로든 확장 가능
-                if(!(indexVisited chk target+1) && target + 1 < maxDepth && (target + 1) % row != 0 ){
-                    // 오른쪽 블럭이 방문되지 않았고, 존재하며, 줄을 넘어간 블럭이 아닐 때
-                    visit(target+1,HORIZONTAL,lastSum)
-                }
-                if(!(indexVisited chk target+row) && target + row < maxDepth){
-                    visit(target+row,VERTICAL,lastSum)
-                }
-            }
-            HORIZONTAL->{
-                // 가로로 확장하던 것을 이어갈 때
-                if(!(indexVisited chk target+1) && target + 1 < maxDepth && (target + 1) % row != 0 ){
-                    visit(target+1,HORIZONTAL,lastSum)
-                }
-                // 세로로 가려면 끊고 가야 가능
-            }
-            VERTICAL->{
-                if(!(indexVisited chk target+row) && target + row < maxDepth){
-                    visit(target+row,VERTICAL,lastSum)
-                }
-            }
-        }
-
-        stack.removeAt(stack.size - 1)
-        indexVisited = indexVisited off target
+        return sum
     }
 
-    visit(0,NOTHING,0)
+    fun dfs(depth:Int){
+        if(depth == maxDepth){
+            val sum = getSumOfBits()
+            maxSum = if(maxSum<sum)sum else maxSum
+        }
+        else {
+            bitUsage = bitUsage on depth
+            dfs(depth + 1)
+            bitUsage = bitUsage off depth
+            dfs(depth + 1)
+        }
+    }
+
+    dfs(0)
     println(maxSum)
 }
