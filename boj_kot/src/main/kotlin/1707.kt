@@ -27,23 +27,24 @@ fun main(){
         }
 
         val stack = mutableListOf<Int>()
-        var paint = 1
         var isPossible = true
 
-        fun dfs(source:Int){
+        fun dfs(source:Int, sourcePaint:Int){
             stack.add(source)
-            paint = if(paint==1) 2 else 1
-            visited[source] = paint
-            graph[source].forEach {
-                if(visited[it]==0) dfs(it)
-                // 인접인데 같게 칠해진 것 발견!
-                else if(visited[it]==visited[source]) isPossible = false
+            var myPaint = if(sourcePaint==1) 2 else 1
+            visited[source] = myPaint
+            if(isPossible){
+                graph[source].forEach {
+                    if(visited[it]==0) dfs(it, myPaint)
+                    // 인접인데 같게 칠해진 것 발견!
+                    else if(visited[it]==visited[source])isPossible = false
+                }
             }
             stack.removeAt(stack.size-1)
         }
 
         graph.withIndex().forEach{
-            if(visited[it.index]==0)dfs(it.index)
+            if(visited[it.index]==0)dfs(it.index,1)
         }
         bw.write(if(isPossible)"YES\n" else "NO\n")
     }
