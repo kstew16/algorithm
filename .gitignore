@@ -190,3 +190,5 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/kotlin,python
 boj_kot/out/production/boj_kot/_1707Kt.class
 *.class
+*.class
+*.kotlin_module
