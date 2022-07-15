@@ -11,6 +11,7 @@ fun main(){
     fun getInt() = st.nextToken().toInt()
     val nodes = getInt()
     val visited = BooleanArray(nodes){false}
+    val inCycle = BooleanArray(nodes){false}
     val distance = IntArray(nodes){0}
     val map = Array(nodes){
         mutableListOf<Int>()
@@ -53,8 +54,14 @@ fun main(){
             }
     }
 
+    fun secondDfs(visiting:Int){
+        var childCount = 0
+        visited[visiting] = true
+
+    }
+
     // 순환선의 분기 노드에서 출발하여 분기 노드 이후의 순환선이 아닌 부분에 거리를 표기하는 탐색
-    fun secondDfs(source:Int, visiting:Int, distanceFromFork:Int):Boolean{
+    fun thirdDfs(source:Int, visiting:Int, distanceFromFork:Int):Boolean{
         var hasNext = false
         var childStuck = false
         visited[visiting] = true
@@ -62,10 +69,10 @@ fun main(){
             if(!visited[it]){
                 hasNext = true
                 childStuck = if(map[visiting].size>2){
-                    secondDfs(visiting, it, 1)
+                    thirdDfs(visiting, it, 1)
                 }
                 else{
-                    secondDfs(visiting, it, distanceFromFork+1)
+                    thirdDfs(visiting, it, distanceFromFork+1)
                 }
             }
         }
@@ -80,7 +87,8 @@ fun main(){
         // 비순환 노드가 발견된 경우
         firstDfs(startPoint)
         for(i in 0 until nodes){visited[i] = false}
-        secondDfs(-1,forkPoint,0)
+        for(i in 0 until nodes){visited[i] = false}
+        thirdDfs(-1,forkPoint,0)
     }
 
     distance.forEach {
