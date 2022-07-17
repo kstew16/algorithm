@@ -3,8 +3,7 @@ import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.util.*
-// 처음에 제대로 조건을 생각했는데도 불구하고, 그 조건을 다 구현하지 않았음
-// 조건을 상부에 기재하고 해당 조건을 체크하는 습관을 들이면 좋을 듯
+
 fun main() {
 
     val br = BufferedReader(InputStreamReader(System.`in`))
@@ -18,10 +17,12 @@ fun main() {
     val nominateCount = IntArray(nodes) { 0 }
     val nominateSequence = mutableListOf<Int>()
 
+    // ============= 입력부 =============
     val map = Array(nodes) {
         ArrayList<Int>()
     }
 
+    // 양방향그래프의 특성을 살려 입력받음, 노드번호는 자연수만 존재하나, 0번 인덱스를 1번 노드를 위해 사용하겠음 (getInt() - 1)
     repeat(nodes-1) {
         st = StringTokenizer(br.readLine())
         val from = getInt() - 1
@@ -30,15 +31,26 @@ fun main() {
         map[to].add(from)
     }
     st = StringTokenizer(br.readLine())
+    // 채점할 경로를 받아 저장
     val givenPath = IntArray(nodes){
         getInt() - 1
     }
+    br.close()
+
+    // =========== 해결부 ===============
     val startPoint = givenPath[0]
     if(startPoint != 0) {
+        // 문제에서 출발지점은 항상 1, 이것을 처리하지 않으면 71%에서 틀림
         println(0)
         return
     }
 
+    // BFS 의 유효성은 크게 두 가지로 결정된다.
+    // 1. Depth 를 벗어난 탐색이 있는가
+    // 2. 부모를 방문한 순서대로 자식을 방문했는가
+
+    // 먼저 DFS 로 모든 노드의 Depth 정보와 부모 노드를 기록해준다.
+    // 트리에서 Depth 와 부모 노드의 정보는 서치와 무관한 정보이다.
     fun dfs(visiting:Int, depth:Int){
         visited[visiting] = true
         depthFromStart[visiting] = depth
@@ -57,25 +69,33 @@ fun main() {
     var lastParent = -1
 
 
+    // 이제 주어진(입력받은) 경로를 따라서 트리를 방문한다.
+    // DFS 를 통해 얻은 트리의 정보를 통해서 유효성을 검사하고, 순서를 기록할 수 있다.
     givenPath.forEach {current->
-        // 저번 방문한 노드의 depth 가 더 큰 역행 발생시 감지 - %51
+        // 1. 저번 방문한 노드의 depth 가 더 큰 역행 발생시 감지
         val currentDepth = depthFromStart[current]
         if(lastDepth>currentDepth) isValid = false
         lastDepth = currentDepth
 
-        // 부모가 바뀐 경우를 감지- %51
+        // 연속된 방문 간 서로 다른 부모를 방문한다면 부모 접근의 순서 변화로 기록할 수 있다.
+        // 이 때 부모 접근(선정 = nominate) 횟수를 기록하여 동일 부모의 중복 방문을 처리한다.
         val currentParent = parentInfo[current]
         if(lastParent!=currentParent) {
             nominateSequence.add(currentParent)
             nominateCount[currentParent] += 1
-
         }
         lastParent = currentParent
     }
-    //부모의 순서가 바뀐 거는 어떻게 감지하지?
+
+    // 여러 번 방문된 부모가 있다면 순서에 관계없이 유효하지 않음
+    nominateCount.forEach {
+        if(it>1) isValid=false
+    }
+
+    // 2. "주어진 경로를 따라갔을 때 방문되는 부모의 순서"와  "주어진 경로 중 부모 부분의 순서"를 비교한다
     var index = 0
     nominateSequence.forEach {
-        // 자식이 없는 부모때문에 순서 꼬일 수 있음
+        // 주어진 경로의 노드 중 자식 노드가 없는 노드는 부모 순서 비교 대상이 아님
         while( index<nodes && nominateCount[givenPath[index]]==0){
             index++
         }
@@ -85,17 +105,7 @@ fun main() {
         index++
     }
 
-
-    // 같은 부모의 자식이 띄엄띄엄 등장한 적이 있는가?
-    nominateCount.forEach { if(it>1)isValid=false }
-
-    // 모든 노드는 방문되었는가?
-    for(i in 0 until nodes) if(!visited[i]) isValid = false
-
-
-
     bw.write(if(isValid)"1" else "0")
     bw.flush()
     bw.close()
-    br.close()
 }

@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter
 import java.util.*
 // 처음에 제대로 조건을 생각했는데도 불구하고, 그 조건을 다 구현하지 않았음
 // 조건을 상부에 기재하고 해당 조건을 체크하는 습관을 들이면 좋을 듯
+// + 이 문제 되게 오래걸렸는데 입력에 이상한 거 있었음 (시작경로가 1이 아닌 경우 무조건 틀린 BFS)
 fun main() {
     // INPUT ===================================
     val br = BufferedReader(InputStreamReader(System.`in`))
