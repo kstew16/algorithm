@@ -6,17 +6,19 @@ import java.util.*
 // 처음에 제대로 조건을 생각했는데도 불구하고, 그 조건을 다 구현하지 않았음
 // 조건을 상부에 기재하고 해당 조건을 체크하는 습관을 들이면 좋을 듯
 // + 이 문제 되게 오래걸렸는데 입력에 이상한 거 있었음 (시작경로가 1이 아닌 경우 무조건 틀린 BFS)
+// 이 풀이는 정석적인 풀이는 아니고 BFS 의 특성을 통해 지역적 정보만을 사용한 풀이
 fun main() {
-    // INPUT ===================================
+
     val br = BufferedReader(InputStreamReader(System.`in`))
     val bw = BufferedWriter(OutputStreamWriter(System.out))
     var st = StringTokenizer(br.readLine())
     fun getInt() = st.nextToken().toInt()
     val nodes = getInt()
     val visited = BooleanArray(nodes) { false }
-
-
-    var isValid = true
+    val depthFromStart = IntArray(nodes) { 0 }
+    val parentInfo = IntArray(nodes) { -1 }
+    val nominateCount = IntArray(nodes) { 0 }
+    val nominateSequence = mutableListOf<Int>()
 
     val map = Array(nodes) {
         ArrayList<Int>()
@@ -29,59 +31,68 @@ fun main() {
         map[from].add(to)
         map[to].add(from)
     }
-
-
-
-
     st = StringTokenizer(br.readLine())
     val givenPath = IntArray(nodes){
         getInt() - 1
     }
-
-    val state = Array(nodes){
-        var queueSize = map[givenPath[it]].size
-        IntArray(queueSize){-1}
+    val startPoint = givenPath[0]
+    if(startPoint != 0) {
+        println(0)
+        return
     }
 
-    // SOLVE ===================================
-    var bottom =0
-
-    for(i in 0 until nodes){
-        val current=givenPath[i]
-
-        visited[current] = true
-        map[current].withIndex().forEach{
-            if(!visited[it.value])
-                state[i][it.index] = it.value
-        }
-
-        var isQueueEmpty = true
-        state[bottom].forEach { if(it != -1)isQueueEmpty = false }
-        // Empty 하지 않은 queue 를 찾을 때까지 bottom 증가
-
-        while(bottom<i && isQueueEmpty ){
-            bottom++
-            state[bottom].forEach { if(it != -1)isQueueEmpty = false }
-        }
-
-
-        if(i+1<nodes) {
-            if (givenPath[i + 1] !in state[bottom]) {
-                isValid = false
-                break
-            } else {
-                //state[bottom].remove(givenPath[i + 1])
-                //state[bottom][state[bottom].find { it==givenPath[i+1] }!!] = -1
-                state[bottom][state[bottom].indexOf(givenPath[i+1])] = -1
+    fun dfs(visiting:Int, depth:Int){
+        visited[visiting] = true
+        depthFromStart[visiting] = depth
+        map[visiting].forEach {
+            if(!visited[it]) {
+                dfs(it,depth+1)
+                parentInfo[it] = visiting
             }
         }
     }
 
+    dfs(startPoint,0)
 
+    var lastDepth = depthFromStart[startPoint]
+    var isValid = true
+    var lastParent = -1
+
+
+    givenPath.forEach {current->
+        // 저번 방문한 노드의 depth 가 더 큰 역행 발생시 감지 - %51
+        val currentDepth = depthFromStart[current]
+        if(lastDepth>currentDepth) isValid = false
+        lastDepth = currentDepth
+
+        // 부모가 바뀐 경우를 감지- %51
+        val currentParent = parentInfo[current]
+        if(lastParent!=currentParent) {
+            nominateSequence.add(currentParent)
+            nominateCount[currentParent] += 1
+
+        }
+        lastParent = currentParent
+    }
+    //부모의 순서가 바뀐 거는 어떻게 감지하지?
+    var index = 0
+    nominateSequence.forEach {
+        // 자식이 없는 부모때문에 순서 꼬일 수 있음
+        while( index<nodes && nominateCount[givenPath[index]]==0){
+            index++
+        }
+        if(index<nodes){
+            if(givenPath[index]!=it) isValid = false
+        }
+        index++
+    }
+
+
+    // 같은 부모의 자식이 띄엄띄엄 등장한 적이 있는가?
+    nominateCount.forEach { if(it>1)isValid=false }
 
 
     bw.write(if(isValid)"1" else "0")
-
     bw.flush()
     bw.close()
     br.close()

@@ -4,61 +4,53 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.util.*
 
-
-private fun main(){
+fun main(){
     val br = BufferedReader(InputStreamReader(System.`in`))
     val bw = BufferedWriter(OutputStreamWriter(System.`out`))
     var st = StringTokenizer(br.readLine())
     fun getInt() = st.nextToken().toInt()
-    val width = getInt()
-    val field = Array(width){
-        br.readLine().split(" ").map { it.toInt() }.toIntArray()
-    }
-    val visited = Array(width){
-        IntArray(width){-1}
-    }
-    val boundaryQueue = Array(width*width*4){ intArrayOf(-1,-1) }
-    var bottom = 0
-    var top = 0
+    val case = getInt()
 
-    val dx = arrayOf(1,0,-1,0)
-    val dy = arrayOf(0,1,0,-1)
+    repeat(case){
+        st = StringTokenizer(br.readLine())
+        val vertex = getInt()
+        val edge = getInt()
+        val graph = MutableList<MutableList<Int>>(vertex){mutableListOf()}
+        val visited = IntArray(vertex){0}
 
-    var cComps = 0
-    var count = 0
+        repeat(edge){
+            st = StringTokenizer(br.readLine())
+            val arg1  = getInt()
+            val arg2 = getInt()
+            graph[arg1-1].add(arg2-1)
+            graph[arg2-1].add(arg1-1)
+        }
 
-    fun dfs(y:Int, x:Int){
-        visited[y][x] = cComps
-        count ++
+        val stack = mutableListOf<Int>()
+        var isPossible = true
 
-        for(i in 0 until 4){
-            val nx = x + dx[i]
-            val ny = y + dy[i]
-            if(nx in 0 until width && ny in 0 until width && visited[ny][nx] == -1){
-                if(field[ny][nx]==1)dfs(ny,nx)
-                else{
-                    visited[ny][nx] = 0
-                    boundaryQueue[top++] = intArrayOf(ny,nx)
+        fun dfs(source:Int, sourcePaint:Int){
+            stack.add(source)
+            var myPaint = if(sourcePaint==1) 2 else 1
+            visited[source] = myPaint
+            if(isPossible){
+                graph[source].forEach {
+                    if(visited[it]==0) dfs(it, myPaint)
+                    // 인접인데 같게 칠해진 것 발견!
+                    else if(visited[it]==visited[source])isPossible = false
                 }
             }
-
+            stack.removeAt(stack.size-1)
         }
-    }
 
-    var elements = mutableListOf<Int>()
-    for(y in 0 until width){
-        for(x in 0 until width){
-            if(field[y][x]==1 && visited[y][x] == -1){
-                count = 0
-                cComps += 1
-                dfs(y,x)
-                elements.add(count)
-            }
+        graph.withIndex().forEach{
+            if(visited[it.index]==0)dfs(it.index,1)
         }
+        bw.write(if(isPossible)"YES\n" else "NO\n")
     }
 
 
     bw.flush()
-    bw.close()
     br.close()
+    bw.close()
 }

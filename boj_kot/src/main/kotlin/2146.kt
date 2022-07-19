@@ -4,7 +4,9 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.util.*
 import kotlin.collections.ArrayList
-
+// 이 풀이에서 나는 다른 컴포넌트와의 최소 거리를 구하기 위해 각 컴포넌트 경계지점에서 다른 컴포넌트까지의 거리를 측정했는데
+// 그럴 필요 없이 각 컴포넌트를 주위로 한 칸씩 확장해나가면서 만났을 경우 두 개의 확장량을 더하면 그게 거리더라
+// 결과적으로 연산의 수와 큐잉의 개수가 1/경계노드 수 로 줄어들을 수 있었음
 
 private fun main(){
     val br = BufferedReader(InputStreamReader(System.`in`))
