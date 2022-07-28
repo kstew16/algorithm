@@ -9,6 +9,7 @@ import java.util.*
  * 그리고 긴가민가했는데 visited 용도로 사용된 depths 랑 positions 는 노드의 데이터를 인덱스로 삼아서 통통 뛰어다니는데
  * 트리 구조 서칭할 때 트리랑 독립적으로 visited 운용하고 싶으면 이 방식 채택해도 괜찮을 것 같다는 생각
  * 그와 별개로 수행시간이랑 메모리랑 다 터져서 피드백 한 번 해야 할 듯
+ * 그리고 childSize 근본없으니까 nodeSize 구현하든지 하셈 ㅋㅋㅋ
 */
 
 fun main()=with(BufferedReader(InputStreamReader(System.`in`))){

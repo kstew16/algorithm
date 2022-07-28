@@ -2,38 +2,39 @@ import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
-
-private data class TreeNode<T>(
-    val data: T,
-    var left: TreeNode<T>? = null,
-    var right: TreeNode<T>? = null
-)
-private class Tree{
-    var root: TreeNode<String>? = null
-    fun addNode(data:String, left:String, right:String){
-        val newNode = TreeNode(
-            data,
-            if(left!=".") TreeNode(left) else null,
-            if(right!=".") TreeNode(right) else null
-        )
-        root?.let{
-            search(newNode,it)
-            return
-        }
-        root = newNode
-    }
-    fun search(addingNode:TreeNode<String>,searchingNode:TreeNode<String>){
-        if(searchingNode.data==addingNode.data){
-            searchingNode.left = addingNode.left
-            searchingNode.right = addingNode.right
-        }
-        else{
-            searchingNode.left?.let { search(addingNode,it) }
-            searchingNode.right?.let { search(addingNode,it) }
-        }
-    }
-}
 fun main()=with(BufferedReader(InputStreamReader(System.`in`))){
+
+    data class TreeNode<T>(
+        val data: T,
+        var left: TreeNode<T>? = null,
+        var right: TreeNode<T>? = null
+    )
+    class Tree{
+        var root: TreeNode<String>? = null
+        fun addNode(data:String, left:String, right:String){
+            val newNode = TreeNode(
+                data,
+                if(left!=".") TreeNode(left) else null,
+                if(right!=".") TreeNode(right) else null
+            )
+            root?.let{
+                search(newNode,it)
+                return
+            }
+            root = newNode
+        }
+        fun search(addingNode:TreeNode<String>,searchingNode:TreeNode<String>){
+            if(searchingNode.data==addingNode.data){
+                searchingNode.left = addingNode.left
+                searchingNode.right = addingNode.right
+            }
+            else{
+                searchingNode.left?.let { search(addingNode,it) }
+                searchingNode.right?.let { search(addingNode,it) }
+            }
+        }
+    }
+
     val nodes = readLine().toInt()
     val tree = Tree()
     val bw = BufferedWriter(OutputStreamWriter(System.`out`))
