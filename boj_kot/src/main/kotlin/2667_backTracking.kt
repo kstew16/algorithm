@@ -9,7 +9,6 @@ import java.util.*
 
 fun main(){
     val br = BufferedReader(InputStreamReader(System.`in`))
-    val bw = BufferedWriter(OutputStreamWriter(System.`out`))
     var st = StringTokenizer(br.readLine())
     fun getInt() = st.nextToken().toInt()
     val width = getInt()
@@ -21,7 +20,6 @@ fun main(){
     }
 
     var numbering = 0
-    var apartmentCount: Dictionary<Int,Int>
 
     fun dfs(x:Int=0, y:Int=0):Int{
         // 내 자리에 아파트가 존재할 경우

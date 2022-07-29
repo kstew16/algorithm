@@ -5,7 +5,7 @@ import java.io.OutputStreamWriter
 import java.util.StringTokenizer
 
 fun main(){
-    """
+    /*
             var bottom = 0
             var top = 0
             var distance = 0
@@ -23,8 +23,7 @@ fun main(){
                         }
                     }
                 }
-            }
-"""
+            }*/
     val br = BufferedReader(InputStreamReader(System.`in`))
     val bw = BufferedWriter(OutputStreamWriter(System.out))
     var st = StringTokenizer(br.readLine())
