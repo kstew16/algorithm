@@ -10,10 +10,10 @@ fun main()=with(BufferedReader(InputStreamReader(System.`in`))){
     val w = getInt()
     val target = mutableListOf<IntArray>()
     val field = Array(h){
-        y->
+            y->
         st = StringTokenizer(readLine())
         IntArray(w){
-            x->
+                x->
             val input = getInt()
             if(input in 1..5) target.add(intArrayOf(y,x))
             input
@@ -25,13 +25,10 @@ fun main()=with(BufferedReader(InputStreamReader(System.`in`))){
             for(i in 0 until w)
                 to[j][i] = from[j][i]
     }
+
     class Camera(_type:Int,_direction:Int){
         val type =_type
         var direction = _direction
-        fun rotate(){
-            // Clockwise rotation
-            direction = ((direction+1)%4)
-        }
 
         fun watch(targetField:Array<IntArray>,y:Int,x:Int){
             val goingRight = ((type == 1 && direction == 0) ||
@@ -95,12 +92,6 @@ fun main()=with(BufferedReader(InputStreamReader(System.`in`))){
         }
     }
 
-    val temp = Array(h){
-        IntArray(w){
-            0
-        }
-    }
-
     var minCount = 64
 
     fun countBlind(map:Array<IntArray>):Int {
@@ -111,33 +102,37 @@ fun main()=with(BufferedReader(InputStreamReader(System.`in`))){
         return count
     }
 
-        val visited = IntArray(target.size){ 0 }
-    fun dfs(visiting:Int,depth:Int){
+    val stack = mutableListOf<Int>()
+    fun permute(depth:Int){
         if(depth == target.size){
-            minCount = countBlind(copy).coerceAtMost(minCount)
-        }else{
-            copyArr(from=copy,to=temp) // temp 에 현재 상황 백업
-            while(visited[visiting]<4){
-                copyArr(from=temp,to=copy) //매 루프마다 꺼내 씀
-                visited[visiting]+= 1
-                val (b,a) = target[visiting]
+            // stack 에 카메라 번호별로 direction 이 0,1,2,3 이렇게 자리잡을 수 있게
+            copyArr(from=field,to=copy)
+            stack.withIndex().forEach {
+                val (b,a) = target[it.index]
                 val camType = field[b][a]
-                val direction = visited[visiting] - 1
+                val direction = it.value
                 val cam = Camera(camType,direction)
                 // 수정되는건 copy
                 cam.watch(copy,b,a)
-
-                if(visiting<target.size-1 && visited[visiting+1] < 4)
-                    dfs(visiting+1,depth+1)
-                else if(visiting+1 == target.size) dfs(visiting+1,depth+1)
             }
-            copyArr(from=temp,to=copy) // 루프 종료시 원상태로 복구
-            visited[visiting] = 0
+            minCount = countBlind(copy).coerceAtMost(minCount)
+            return
+        }
+        val (b,a) = target[depth]
+        val possibleCamDirection = when(field[b][a]){
+            1 -> 3
+            2 -> 1
+            3 -> 3
+            4 -> 3
+            5 -> 0
+            else -> 0
+        }
+        for(i in 0..possibleCamDirection){
+            stack.add(i)
+            permute(depth+1)
+            stack.removeAt(stack.size-1)
         }
     }
-    repeat(4){
-        copyArr(field,copy)
-        dfs(0,0)
-    }
+    permute(0)
     println(minCount)
 }
