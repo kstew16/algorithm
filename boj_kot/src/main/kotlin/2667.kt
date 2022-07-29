@@ -8,7 +8,6 @@ import java.util.*
 
 fun main(){
     val br = BufferedReader(InputStreamReader(System.`in`))
-    val bw = BufferedWriter(OutputStreamWriter(System.`out`))
     var st = StringTokenizer(br.readLine())
     fun getInt() = st.nextToken().toInt()
     val width = getInt()
@@ -20,7 +19,6 @@ fun main(){
     }
 
     var numbering = 0
-    var apartmentCount: Dictionary<Int,Int>
 
     fun dfs(sourceNum:Int, x:Int=0, y:Int=0){
         // -1로 초기화된 visited 에 대해서

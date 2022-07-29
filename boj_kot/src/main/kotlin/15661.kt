@@ -7,7 +7,7 @@ import kotlin.math.min
 
 fun main() {
 
-    """
+    /*
      설명이 인덱스가 아닌 선수번호로 서술
     sumStat이란?
     pStat[1] = sum(11,11,12,13,14,21,31,41)
@@ -22,7 +22,7 @@ fun main() {
     거기서 pStat[1]과 pStat[2]를 뺀다고 하면
     -(11 12, 21, 22) + (33,34,44,43) 이 남게 되고
     이것은 (1,2) 팀과 (3,4) 팀의 능력치 합의 차이다.
-    """
+    */
     val br = BufferedReader(InputStreamReader(System.`in`))
 
     // 인원수 입력받고
@@ -53,7 +53,6 @@ fun main() {
     // 멤버수의 조합은 1부터 n//2 + 1 미만으로 사용하면 되네
     // 팀의 조합 만들고
     val visited = ((0 until n).map { false }).toBooleanArray()
-    val teamSet = ArrayList<IntArray>()
     val stack = mutableListOf<Int>()
     var minVal = Integer.MAX_VALUE
 

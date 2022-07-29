@@ -11,7 +11,6 @@ fun main(){
     fun getInt() = st.nextToken().toInt()
     val nodes = getInt()
     val visited = BooleanArray(nodes){false}
-    val inCycle = BooleanArray(nodes){false}
     val distance = IntArray(nodes){0}
     val map = Array(nodes){
         mutableListOf<Int>()
@@ -54,11 +53,6 @@ fun main(){
             }
     }
 
-    fun secondDfs(visiting:Int){
-        var childCount = 0
-        visited[visiting] = true
-
-    }
 
     // 순환선의 분기 노드에서 출발하여 분기 노드 이후의 순환선이 아닌 부분에 거리를 표기하는 탐색
     fun thirdDfs(source:Int, visiting:Int, distanceFromFork:Int):Boolean{

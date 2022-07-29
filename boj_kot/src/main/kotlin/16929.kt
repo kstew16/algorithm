@@ -28,9 +28,9 @@ fun main(){
                 fun dfs(source:IntArray, current:IntArray){
                     val (currentY,currentX) = current
                     visited[currentY][currentX] = true
-                    for(i in 0 until 4){
-                        val nx = currentX + dx[i]
-                        val ny = currentY + dy[i]
+                    for(k in 0 until 4){
+                        val nx = currentX + dx[k]
+                        val ny = currentY + dy[k]
                         if(source[0] != ny || source[1] != nx) {
                             // 내가 온 지점은 볼 필요 없음
                             if (nx in 0 until m && ny in 0 until n && graph[ny][nx] == sourceType) {
