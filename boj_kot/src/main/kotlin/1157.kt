@@ -1,4 +1,4 @@
-//1157
+//1157 Memory, String 은 Char 에 비해 굉장히 큰 메모리를 사용함
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
