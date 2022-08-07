@@ -20,11 +20,11 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         return
     }
 
-    val queue = LinkedList<IntArray>().apply { add(intArrayOf(1,0,HORIZONTAL,-1)) }
+    val queue = LinkedList<IntArray>().apply { add(intArrayOf(1,0,HORIZONTAL)) }
     var count = 0
 
     while(queue.isNotEmpty()){
-        val(x2,y2,direction,from) = queue.pollFirst()
+        val(x2,y2,direction) = queue.pollFirst()
         if(x2==n-1 && y2==n-1){
             count+=1
             continue
@@ -50,19 +50,19 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         // 도착지에 벽이 있는 경우는 초반부에 검사 했음
         if(pushHorizontal){
             if(x2+1<n-1 && field[y2][x2+1]== 0) {
-                queue.add(intArrayOf(x2+1,y2,HORIZONTAL,direction))
+                queue.add(intArrayOf(x2+1,y2,HORIZONTAL))
             }
             // 방의 경계로 이동하려는 경우, 도착지가 아니면 dead end 밖에 없음
             else if(x2+1 == n-1 && y2==n-1) count+=1
         }
         if(pushVertical) {
             if(y2+1<n-1 && field[y2+1][x2]==0) {
-                queue.add(intArrayOf(x2,y2+1,VERTICAL,direction))
+                queue.add(intArrayOf(x2,y2+1,VERTICAL))
             }
             else if(y2+1==n-1 && x2==n-1) count+=1
         }
         // 대각선 밀기는 어떤 방향에서든 가능
-        if(y2+1<n && x2+1<n && (field[y2][x2+1]+field[y2+1][x2]+field[y2+1][x2+1])==0) queue.add(intArrayOf(x2+1,y2+1,DIAGONAL,direction))
+        if(y2+1<n && x2+1<n && (field[y2][x2+1]+field[y2+1][x2]+field[y2+1][x2+1])==0) queue.add(intArrayOf(x2+1,y2+1,DIAGONAL))
     }
     print(count)
 
