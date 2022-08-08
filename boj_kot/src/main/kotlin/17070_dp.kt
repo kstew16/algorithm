@@ -2,7 +2,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 import kotlin.contracts.contract
-
+// Also 17069
 private const val HORIZONTAL = 0
 private const val VERTICAL = 1
 private const val DIAGONAL = 2
@@ -13,7 +13,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         IntArray(n){st.nextToken().toInt()}
     }
 
-    val ways = Array(n){Array(n){IntArray(3){0}}}.apply{this[0][1][HORIZONTAL] = 1}
+    val ways = Array(n){Array(n){LongArray(3){0}}}.apply{this[0][1][HORIZONTAL] = 1}
     (0 until n).forEach { j->
         (0 until n).forEach { i->
             if(field[j][i]==0){
