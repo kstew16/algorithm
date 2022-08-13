@@ -1,6 +1,6 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
+// infix 공부하는거 포함해서 푸는데 한 3시간 걸렸음 다행히 골드1이네
 private fun evaluate(expList:CharArray):Int{
     fun priority(operation:Char):Int = if(operation=='#'||operation=='X'||operation=='_') 2 else if (operation=='*') 1 else 0
     val stack = mutableListOf<Char>()
