@@ -2,7 +2,8 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.LinkedList
 import java.util.StringTokenizer
-
+// 답은 안 봤지만 푸는거 매우 오래 걸렸음. 2시간 반 쯤, 예외사항을 발견하지 못했고 못할 만 한 예외였긴 함
+// 제한시간에는 넉넉하게 맞지만... -> 다른 분은 착수 후 주변 상대 돌 탐색이 아니라 상대 돌 탐색 후 착수 지점 지정으로 시간 당김
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val (n,m) = readLine().split(" ").map{it.toInt()}
 
@@ -27,7 +28,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         val componentArea = mutableListOf<Int>()
         var label = 0
 
-        while(searchQueue.isNotEmpty()){
+        while(searchQueue.isNotEmpty()) {
             val (ty,tx) = searchQueue.pollFirst()
             var count = 0
             var valid = true
@@ -42,13 +43,10 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
                     if(ny in 0 until n && nx in 0 until m && visited[ny][nx] == 0){
                         when(field[ny][nx]){
                             0 -> {
-                                // 빈 공간과 이웃한 경우 갇히지 못한 component 이다.  valid 로 기록을 막는다
                                 valid = false
+                                return
                             }
-                            1 -> {}
-                            2 -> {
-                                dfsConnected(intArrayOf(ny,nx),label)
-                            }
+                            2 -> dfsConnected(intArrayOf(ny,nx),label)
                         }
                     }
                 }
@@ -57,9 +55,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
             if(visited[ty][tx]==0){
                 label+=1
                 dfsConnected(intArrayOf(ty,tx),label)
-                if(valid){
-                    componentArea.add(count)
-                }
+                if(valid)componentArea.add(count)
             }
         }
         return componentArea.sum()
@@ -67,40 +63,50 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
 
 
     var maxScore = 0
+    val placed = Array(2){intArrayOf(-1,-1)}
     fun place(depth:Int){
         if(depth == 2){
+            placed.forEach {
+                // 배치된 돌의 주변 점을 스타팅포인트로 설정, 스타팅포인트부터 탐색
+                val (j,i) = it
+                for(index in 0..3){
+                    val ny = j + dy[index]
+                    val nx = i + dx[index]
+                    if(ny in 0 until n && nx in 0 until m && field[ny][nx]==2) searchQueue.add(intArrayOf(ny,nx))
+                }
+            }
             maxScore = score().coerceAtLeast(maxScore)
         }
         else{
             for(j in 0 until n){
                 for(i in 0 until m){
-                    // 중복지정 이슈 있음
-                    if(field[j][i] == 0){ // 빈 곳이며, 주변에 적의 돌이 있는 경우에만 착수 대상 지점으로 간주
-                        // -> 이러면 의미 없는 돌 하나가 있는 경우 시작을 못 함
-                        // 따라서 주변의 돌이 있는 경우 + 이미 돌을 둔 경우
+                    if(field[j][i] == 0){ // 착수 가능한 지점에
                         var valid = false
                         for(index in 0..3){
                             val ny = j + dy[index]
                             val nx = i + dx[index]
-                            // 착수한 돌 주변의 적의 돌을 BFS 의 출발지로 삼는다
-                            //if(ny in 0 until n && nx in 0 until m && field[ny][nx]==2){
                             if(ny in 0 until n && nx in 0 until m && field[ny][nx]==2){
                                 valid = true
-                                searchQueue.add(intArrayOf(ny,nx))
+                                break
                             }
                         }
-                        if(!valid && depth==1){
-                            // 1번 돌이 이미 의미있는 착수를 한 경우
-                            // 의미있는 착수를 1개도 할 수 없는 경우는?
-                            valid = true
-                        }
                         if(valid){
+                            // 의미 있는 돌을 둔 자리를 기억하고 다음 돌 두기
                             field[j][i] = 1
+                            placed[depth] = intArrayOf(j,i)
                             place(depth+1)
+                            placed[depth] = intArrayOf(0,0)
                             field[j][i] = 0
                         }
                     }
                 }
+            }
+            if(depth == 1 && placed[depth].contentEquals(intArrayOf(-1,-1))){
+                // 두 번째 돌에서 조건문을 다 돌았는데도 의미있는 착수를 진행할 수 없는 경우, 첫 번째 돌만 두는 것으로 간주
+                placed[0].withIndex().forEach {
+                    placed[1][it.index] = placed[0][it.index]
+                }
+                place(depth+1)
             }
         }
     }
