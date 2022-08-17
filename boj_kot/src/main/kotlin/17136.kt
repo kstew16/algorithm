@@ -43,35 +43,44 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     var count = 0
     var minCount = Int.MAX_VALUE
 
-    fun dfsPlace(sourceY:Int){
+    fun dfsPlaceSized(size:Int){
         if(targetCount == 0) minCount = count.coerceAtMost(minCount)
-        for(y in sourceY until LIMIT){
+        // 이제 더 들어갈건데 의미없는거면 컷
+        if(count+1>=minCount) return
+
+        // Place 하는 가지
+        for(y in 0 until LIMIT){
             for(x in 0 until LIMIT){
                 if(canPlace[y][x]){
-                    for(size in 1..5){
-                        if(checkSpace(y,x,size)){
-                            if(papers[size-1]>0){
-                                toggle(y,x,size, replace = false)
-                                count += 1
-                                papers[size-1] -= 1
-                                targetCount -= size*size
-                                dfsPlace(y)
-                                targetCount += size*size
-                                toggle(y,x,size, replace = true)
-                                count -= 1
-                                papers[size-1] += 1
-                            }
-                            else{
+                    if(checkSpace(y,x,size)) {
+                        if (papers[size - 1] > 0) {
+                            toggle(y, x, size, replace = false)
+                            count += 1
+                            papers[size - 1] -= 1
+                            targetCount -= size * size
 
-                            }
+                            dfsPlaceSized(size)
+
+                            targetCount += size * size
+                            toggle(y, x, size, replace = true)
+                            count -= 1
+                            papers[size - 1] += 1
                         }
-                        else break
                     }
                 }
             }
         }
+
+        // Place 하지 않는 가지
+        var leftPaper = 0
+        papers.withIndex().forEach {
+            if(it.index<size-1){
+                leftPaper += (it.index+1)*(it.index+1)*(it.value)
+            }
+        }
+        if(leftPaper>=targetCount && size>1) dfsPlaceSized(size-1)
     }
-    dfsPlace(0)
+    dfsPlaceSized(5)
 
     print(if(minCount==Int.MAX_VALUE) -1 else minCount)
 }
