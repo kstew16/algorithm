@@ -1,85 +1,69 @@
-import java.util.LinkedList
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import kotlin.math.sqrt
 
-fun main(){
-    data class MazeNode(val y:Int, val x:Int, val direction:Char)
-    val size = 500
-    val table = Array(size){CharArray(size){'F'} }
-    val visited = Array(size){BooleanArray(size){false} }
-    val queue = LinkedList<MazeNode>().apply{add(MazeNode(0,0,'R'))}
-    while(queue.isNotEmpty()){
-        val (vy,vx,last) = queue.pollFirst()
-        visited[vy][vx] = true
-        var ty = vy
-        var tx = vx
-        var cur = 'F'
-        when(last){
-            'R' -> tx+=1
-            'D' -> ty+=1
-            'L' -> tx-=1
-            'U' -> ty-=1
+fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
+    val (min, max) = readLine().split(" ").map{it.toLong()}
+    fun eratosthenes(s:Int,e:Int):MutableList<Int>{
+        // 에라토스테네스의 체를 이용해 s부터 e 사이의 합성수들을 false 처리
+        val isPrime = BooleanArray(e + 1){true}
+        val output = mutableListOf<Int>()
+
+        // e 의 제곱근 이하의
+        val limit = sqrt(e.toDouble()).toInt()
+        for (i in 2..limit){
+            // 1을 제외한 소수에 대해서
+            if(isPrime[i]){
+                // 소수의 배수들을 체에서 제거
+                var j = 2
+                while (i*j <= e) {
+                    if (isPrime[i * j]) isPrime[i * j] = false
+                    j++
+                }
+            }
         }
-        if(ty in 0 until size && tx in 0 until size){
-            if(table[ty][tx]=='F'){
-                cur = last
-                table[vy][vx] = cur
-                if(!visited[ty][tx]) queue.add(MazeNode(ty,tx,cur))
+
+        for (i in s..e){
+            if (i == 0 || i == 1) continue
+            if(isPrime[i]) output.add(i)
+        }
+        return output
+    }
+    val limit = sqrt(max.toDouble()).toInt()
+    val squareNum = eratosthenes(1,limit).map{it.toLong()*it.toLong()}
+
+    // prime 의 제곱으로 나눠 떨어지는 수들의 개수를 사이의 숫자에서 빼 줌
+    val visited = BooleanArray(squareNum.size){false}
+    val numBetween = (max-min).toInt() + 1
+    val isTarget= BooleanArray(numBetween){true}
+    var test = 0
+    var count =0
+    for(i in numBetween-1 downTo 0){
+        if(!isTarget[i]) continue
+        // 최대 10^6 * 8* 10^4 800억...?
+        val checking = min+i
+        for(j in squareNum.indices){
+
+            val remainder = (checking%squareNum[j]).toInt()
+            test ++
+            // 아직도 쓸모없는 검사가 있음, 두 개 이상의 제곱수를 약수로 가지면 여러 번 검사함
+            if(remainder==0){
+                isTarget[i] = false
             }else{
-                cur = when(last){
-                    'R' -> {
-                        tx = vx
-                        ty = vy+1
-                        'D'
-                    }
-                    'D' -> {
-                        tx = vx-1
-                        ty = vy
-                        'L'
-                    }
-                    'L' -> {
-                        tx = vx
-                        ty =vy-1
-                        'U'
-                    }
-                    'U' -> {
-                        tx = vx+1
-                        ty = vy
-                        'R'
-                    }
-                    else -> 'F'
+                // 아 이것도 이미 false 인 거를 여러번 찾아내네
+                if(visited[j]) continue
+                var k = i
+                var divisor = squareNum[j].toInt()
+                while(k-remainder>0){
+                    visited[j] = true
+                    isTarget[k-remainder] = false
+                    k-= divisor
                 }
-                table[vy][vx] = cur
-                if(!visited[ty][tx]) queue.add(MazeNode(ty,tx,cur))
             }
-        }else{
-            cur = when(last){
-                'R' -> {
-                    tx = vx
-                    ty = vy+1
-                    'D'
-                }
-                'D' -> {
-                    tx = vx-1
-                    ty = vy
-                    'L'
-                }
-                'L' -> {
-                    tx = vx
-                    ty =vy-1
-                    'U'
-                }
-                'U' -> {
-                    tx = vx+1
-                    ty = vy
-                    'R'
-                }
-                else -> 'F'
-            }
-            table[vy][vx] = cur
-            if(!visited[ty][tx]) queue.add(MazeNode(ty,tx,cur))
         }
     }
 
-    table.forEach {
-        println(it.joinToString(""))
-    }
+    println(test)
+    println(count)
+    print(isTarget.count { it })
 }
