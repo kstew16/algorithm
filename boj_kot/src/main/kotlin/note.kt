@@ -1,7 +1,7 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.math.sqrt
-
+// 1016 tester
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val (min, max) = readLine().split(" ").map{it.toLong()}
     fun eratosthenes(s:Int,e:Int):MutableList<Int>{
@@ -36,16 +36,13 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val visited = BooleanArray(squareNum.size){false}
     val numBetween = (max-min).toInt() + 1
     val isTarget= BooleanArray(numBetween){true}
-    var test = 0
-    var count =0
     for(i in numBetween-1 downTo 0){
         if(!isTarget[i]) continue
         // 최대 10^6 * 8* 10^4 800억...?
         val checking = min+i
         for(j in squareNum.indices){
-
+            if(visited[j]) continue
             val remainder = (checking%squareNum[j]).toInt()
-            test ++
             // 아직도 쓸모없는 검사가 있음, 두 개 이상의 제곱수를 약수로 가지면 여러 번 검사함
             if(remainder==0){
                 isTarget[i] = false
@@ -54,7 +51,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
                 if(visited[j]) continue
                 var k = i
                 var divisor = squareNum[j].toInt()
-                while(k-remainder>0){
+                while(k-remainder in 1 until isTarget.size){
                     visited[j] = true
                     isTarget[k-remainder] = false
                     k-= divisor
@@ -63,7 +60,5 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         }
     }
 
-    println(test)
-    println(count)
     print(isTarget.count { it })
 }

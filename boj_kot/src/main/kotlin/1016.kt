@@ -32,33 +32,28 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val limit = sqrt(max.toDouble()).toInt()
     val squareNum = eratosthenes(1,limit).map{it.toLong()*it.toLong()}
 
-    // prime 의 제곱으로 나눠 떨어지는 수들의 개수를 사이의 숫자에서 빼 줌
-    val visited = BooleanArray(squareNum.size){false}
+    // 두 수의 사이들이 ㄴㄴ제곱수인지 표시할 배열을 만들고
     val numBetween = (max-min).toInt() + 1
     val isTarget= BooleanArray(numBetween){true}
-    for(i in numBetween-1 downTo 0){
-        if(!isTarget[i]) continue
-        // 최대 10^6 * 8* 10^4 800억...?
-        val checking = min+i
-        for(j in squareNum.indices){
-            if(visited[j]) continue
-            val remainder = (checking%squareNum[j]).toInt()
-            // 아직도 쓸모없는 검사가 있음, 두 개 이상의 제곱수를 약수로 가지면 여러 번 검사함
-            if(remainder==0){
-                isTarget[i] = false
-            }else{
-                // 아 이것도 이미 false 인 거를 여러번 찾아내네
-                if(visited[j]) continue
-                var k = i
-                var divisor = squareNum[j].toInt()
-                while(k-remainder in 1 until isTarget.size){
-                    visited[j] = true
-                    isTarget[k-remainder] = false
-                    k-= divisor
-                }
-            }
+
+    // 제곱수 s 에 대해, min 이상의 s 의 배수부터 max 이하의 s 의 배수를 제곱수에서 체크 해제
+    for(i in squareNum.indices){
+        val divisor = squareNum[i]
+        var dividendMaxLong = ((max-max%divisor) - min)
+        var dividendMinLong = if(divisor<min)(divisor-min%divisor)else(min-min%divisor)
+        if(dividendMaxLong<0  || dividendMinLong<0) {
+            continue
+        }
+        var dividendMax = dividendMaxLong.toInt()
+        var dividendMin = dividendMinLong.toInt()
+
+        var j = dividendMax
+        while(j>=dividendMin){
+
+            isTarget[j] = false
+            if(divisor>j.toLong()) break
+            j -= divisor.toInt()
         }
     }
-
-    print(isTarget.count { it })
+    print(isTarget.count{it})
 }
