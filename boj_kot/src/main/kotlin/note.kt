@@ -1,64 +1,103 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.math.sqrt
-// 1016 tester
-fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
-    val (min, max) = readLine().split(" ").map{it.toLong()}
-    fun eratosthenes(s:Int,e:Int):MutableList<Int>{
-        // 에라토스테네스의 체를 이용해 s부터 e 사이의 합성수들을 false 처리
-        val isPrime = BooleanArray(e + 1){true}
-        val output = mutableListOf<Int>()
 
-        // e 의 제곱근 이하의
-        val limit = sqrt(e.toDouble()).toInt()
-        for (i in 2..limit){
-            // 1을 제외한 소수에 대해서
-            if(isPrime[i]){
-                // 소수의 배수들을 체에서 제거
-                var j = 2
-                while (i*j <= e) {
-                    if (isPrime[i * j]) isPrime[i * j] = false
-                    j++
+
+fun main(){
+    // min 과 max 사이의 s 의 배수 개수를 구함
+    fun printKthTNum(k:Int){
+        // min 과 max 사이의 s 의 배수 개수를 구함
+        fun getMultiplesBetween(min:Int,max:Int,s:Int):Int{
+            var dividendUnderMax = (max-max%s)
+            var dividendUpperMin = if(min%s == 0)min else (min-min%s + s)
+            // min 이상이고 max 이하인 s 의 배수가 없는 경우
+            return if(dividendUnderMax<dividendUpperMin) 0
+            else (dividendUnderMax-dividendUpperMin)/s + 1
+        }
+
+        // min 과 max 사이의 제곱수의 개수를 좀 똑똑하게 구함
+        fun getTNumBetween(min:Int,max:Int):Int{
+            fun eratosthenes(s:Int,e:Int):MutableList<Int>{
+                val isPrime = BooleanArray(e + 1){true}
+                val output = mutableListOf<Int>()
+                val limit = sqrt(e.toDouble()).toInt()
+                for (i in 2..limit){
+                    if(isPrime[i]){
+                        var j = 2
+                        while (i*j <= e) {
+                            if (isPrime[i * j]) isPrime[i * j] = false
+                            j++
+                        }
+                    }
                 }
-            }
-        }
 
-        for (i in s..e){
-            if (i == 0 || i == 1) continue
-            if(isPrime[i]) output.add(i)
-        }
-        return output
-    }
-    val limit = sqrt(max.toDouble()).toInt()
-    val squareNum = eratosthenes(1,limit).map{it.toLong()*it.toLong()}
-
-    // prime 의 제곱으로 나눠 떨어지는 수들의 개수를 사이의 숫자에서 빼 줌
-    val visited = BooleanArray(squareNum.size){false}
-    val numBetween = (max-min).toInt() + 1
-    val isTarget= BooleanArray(numBetween){true}
-    for(i in numBetween-1 downTo 0){
-        if(!isTarget[i]) continue
-        // 최대 10^6 * 8* 10^4 800억...?
-        val checking = min+i
-        for(j in squareNum.indices){
-            if(visited[j]) continue
-            val remainder = (checking%squareNum[j]).toInt()
-            // 아직도 쓸모없는 검사가 있음, 두 개 이상의 제곱수를 약수로 가지면 여러 번 검사함
-            if(remainder==0){
-                isTarget[i] = false
-            }else{
-                // 아 이것도 이미 false 인 거를 여러번 찾아내네
-                if(visited[j]) continue
-                var k = i
-                var divisor = squareNum[j].toInt()
-                while(k-remainder in 1 until isTarget.size){
-                    visited[j] = true
-                    isTarget[k-remainder] = false
-                    k-= divisor
+                for (i in s..e){
+                    if (i == 0 || i == 1) continue
+                    if(isPrime[i]) output.add(i)
                 }
+                return output
             }
-        }
-    }
+            val limit = sqrt(max.toDouble()).toInt()
+            val squareNum = eratosthenes(1,limit).map{it*it}
 
-    print(isTarget.count { it })
+            val numBetween = (max-min) + 1
+            var count = 0
+
+            for(i in squareNum.indices){
+                val s = squareNum[i]
+                // 제곱수들의 배수만큽 뺴고 그 중 2개를 고른 경우의 공배수(소수제곱들이라 그냥 곱) 의 개수만큼 더하고,,, 짝수개 고르면 플러스 홀수개는 마이너스
+                val visited = BooleanArray(squareNum.size){false}
+                fun combination(depth:Int,visiting:Int,lcm:Int){
+
+                    visited[visiting] = true
+                    if(depth%2 == 1)count += getMultiplesBetween(min,max,lcm)
+                    else count -= getMultiplesBetween(min,max,lcm)
+
+                    for(i in visiting until squareNum.size){
+                        //lcm 에 곱하는건 오버플로우 안 날때만
+                        if(!visited[i]){
+                            val lNewLCM = lcm.toLong()*squareNum[i].toLong()
+                            if(lNewLCM<=max.toLong()) {
+                                val iNewLCM =  lNewLCM.toInt()
+                                combination(depth+1,i,iNewLCM)
+                            }
+                        }
+                    }
+
+                    visited[visiting] = false
+                }
+                combination(1,i,s)
+            }
+            return (numBetween-count)
+        }
+
+        var low:Int
+        var high = 0
+        var left = k
+        var lastHigh:Int
+
+        while(left>0){
+            low = high + 1
+            lastHigh = high
+            high += (left*GOLDEN_RATIO).toInt()
+
+            var tmp = getTNumBetween(low,high)
+            if(left<tmp){
+                low = lastHigh+1
+                high = lastHigh+left
+                tmp = getTNumBetween(low,high)
+            }
+            left -= tmp
+        }
+        if(getTNumBetween(1,high)!=k){
+            println("WOW!!!! $k")
+        }
+
+        //println(high)
+
+    }
+    for(i in 1 .. 1000000000){
+        printKthTNum(i)
+    }
+    println("done")
 }
