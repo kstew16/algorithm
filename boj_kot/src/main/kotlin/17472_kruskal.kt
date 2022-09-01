@@ -4,7 +4,7 @@ import java.util.LinkedList
 import java.util.StringTokenizer
 
 // 그래프의 각 점에서 바다가 주변에 있다면 해당 방향의 바다로 계속 진행하여, 바다를 만난 경우에만 경로 길이를 포함하여 그래프화
-// 최단 경로만이 입력된 그래프에서 DFS 를 통한 완전 탐색, 경로 최소 경로의 백트래킹 실시 후 출력
+// 이후 그래프의 MST(최소 신장 트리) 를 Kruskal (간선 오름차순 연결) 알고리즘을 통해 구함
 
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val (n,m) = readLine().split(" ").map { it.toInt() }
@@ -67,34 +67,58 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
             nx += directionX
             if(ny !in 0 until n || nx !in 0 until m) break
             val type = world[ny][nx]
-            if(type != 0 && distance>1) worldMap[boundary.type-1][type-1] = distance.coerceAtMost(worldMap[boundary.type-1][type-1])
+            if(type != 0 && type != boundary.type && distance>1) worldMap[boundary.type-1][type-1] = distance.coerceAtMost(worldMap[boundary.type-1][type-1])
         }
     }
 
-    // 모든 다리 후보가 작성되었으니, 섬을 방문하는 모든 경우를
-    // 와 이게 DFS 로 가면 한 섬의 여러 다리를 쓰는 경우가 반영이 안 돼
-    // Combination 으로 다리를 쓰는 경우의 수조차도 넣어야하나
-    var minDistance = Int.MAX_VALUE
+    // 연결 안 된 섬 있으면 불가로 판정
     val islandVisited = BooleanArray(nIsland){false}
-    fun visitIsland(source:Int, visiting:Int, distance:Int,visitCount:Int){
+    fun visitAll(visiting:Int){
         islandVisited[visiting] = true
-        if(visitCount==nIsland){
-            if(islandVisited.any { !it }) println("unexpected case")
-            minDistance =distance.coerceAtMost(minDistance)
-        }
         for(i in 0 until nIsland){
-            if(!islandVisited[i]){
-                val d = worldMap[visiting][i]
-                if(d!=INF){
-                    //used = true
-                    visitIsland(visiting, i,distance+d,visitCount+1)
-                }
-            }
+            if(!islandVisited[i] && worldMap[visiting][i] != INF) visitAll(i)
         }
-        if(source!= -1) visitIsland(-1,source,distance,visitCount)
-        //islandVisited[visiting] = false
     }
-    visitIsland(-1, 0,0,1)
-    if(minDistance == Int.MAX_VALUE) print(-1)
-    else print(minDistance)
+    visitAll(0)
+    if(islandVisited.any { !it }){
+        print(-1)
+        close()
+        return
+    }
+
+    val allEdge = mutableListOf<IntArray>()
+    for(j in 0 until nIsland)
+        for(i in 0 until nIsland)
+            if(worldMap[j][i]!=INF) {
+                allEdge.add(intArrayOf(j,i,worldMap[j][i]))
+            }
+
+    allEdge.sortBy { it[2] }
+    var nConnected = 0
+    var cost = 0
+    val connected = BooleanArray(nIsland)
+
+    for(j in 0 until nIsland)
+        for(i in 0 until nIsland)
+            worldMap[j][i]=INF
+
+    allEdge.withIndex().forEach {
+        val (from,to,distance) = allEdge[it.index]
+
+        for(i in 0 until nIsland) islandVisited[i] = false
+        visitAll(from)
+        if(!islandVisited[to]){
+            connected[from]=true
+            connected[to]=true
+            worldMap[from][to] = distance
+            worldMap[to][from] = distance
+            nConnected+=1
+            cost+= distance
+        }
+        if(nConnected==nIsland-1){
+            print(cost)
+            return
+        }
+    }
+
 }
