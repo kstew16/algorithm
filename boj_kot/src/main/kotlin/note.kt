@@ -1,39 +1,21 @@
-import java.io.BufferedReader
-import java.io.BufferedWriter
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.util.LinkedList
-import java.util.StringTokenizer
-
-fun main()= BufferedReader(InputStreamReader(System.`in`)).run{
-    fun StringTokenizer.getInt() = this.nextToken().toInt()
-    var st = StringTokenizer(readLine())
-    val n = st.getInt()
-    val m = st.getInt()
-    val checked = BooleanArray(n+1){false}.apply { this[0]=true}
-    val smaller = Array(n+1){
-        LinkedList<Int>()
+fun main(){
+    val cArr = mutableListOf<Char>()
+    for(c in 'a' .. 'z') cArr.add(c)
+    for(c in '0' .. '9') cArr.add(c)
+    for(c in 'A' .. 'Z') cArr.add(c)
+    println("50 50")
+    val table = Array(50){
+        CharArray(50){'.'}
     }
-    val taller = Array(n+1){
-        LinkedList<Int>()
-    }
-    repeat(m){
-        st = StringTokenizer(readLine())
-        val a = st.getInt()
-        val b = st.getInt()
-        smaller[b].add(a)
-        taller[a].add(b)
-    }
-    val bw = BufferedWriter(OutputStreamWriter(System.`out`))
-    fun dfs(checking:Int){
-        while(smaller[checking].isNotEmpty()){
-            val target = smaller[checking].pollFirst()
-            dfs(target)
+    for(i in 0 until 50){
+        val char = cArr[i]
+        for(y in 0 until (50-i)){
+            for(x in 0 until (50-i)){
+                table[y][x] = char
+            }
         }
-        bw.write(checking.toString())
     }
-    dfs(1)
-    bw.flush()
-    bw.close()
-    close()
+    table.forEach {
+        println(it.joinToString(""))
+    }
 }
