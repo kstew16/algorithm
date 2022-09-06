@@ -1,21 +1,10 @@
 fun main(){
-    val cArr = mutableListOf<Char>()
-    for(c in 'a' .. 'z') cArr.add(c)
-    for(c in '0' .. '9') cArr.add(c)
-    for(c in 'A' .. 'Z') cArr.add(c)
-    println("50 50")
-    val table = Array(50){
-        CharArray(50){'.'}
+    val field = Array(300){
+        IntArray(800){0}
     }
-    for(i in 0 until 50){
-        val char = cArr[i]
-        for(y in 0 until (50-i)){
-            for(x in 0 until (50-i)){
-                table[y][x] = char
-            }
-        }
+    println("300 800")
+    field.forEach {
+        println(it.joinToString(" "))
     }
-    table.forEach {
-        println(it.joinToString(""))
-    }
+    println("150 400 1 1 150 400")
 }
