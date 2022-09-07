@@ -41,17 +41,21 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val dx = intArrayOf(1,0,-1,0)
     // (d+2)%4 연산과 같음
     // val opposite = intArrayOf(2,3,0,1)
-    fun getDistance(from:IntArray,to:IntArray):Int{
+    val arriveDirection = IntArray(4){Int.MAX_VALUE}
+    fun getDistance(from:IntArray,to:IntArray,lastDirection:Int){
         val (sY,sX) = from
         val (tY,tX) = to
         data class State(val y:Int, val x:Int, val direction:Int, val moved:Int)
         val visited = Array(n){
             BooleanArray(m){false}
         }.apply { this[sY][sX] = true }
-        val queue = LinkedList<State>().apply{ add(State(sY,sX,-1,0))}
+        val queue = LinkedList<State>().apply{ add(State(sY,sX,lastDirection,0))}
         while(queue.isNotEmpty()){
             val cur = queue.pollFirst()
-            if(cur.x==tX && cur.y==tY) return cur.moved
+            if(cur.x==tX && cur.y==tY) {
+                arriveDirection[cur.direction] = cur.moved
+                if(arriveDirection.all{it!= Int.MAX_VALUE}) return
+            }
             for(d in 0..3){
                 val ny = cur.y + dy[d]
                 val nx = cur.x + dx[d]
@@ -62,15 +66,16 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
                 }
             }
         }
-        return -1
+        return
     }
-    val w1 = getDistance(s,c1)
-    val w2 = getDistance(s,c2)
-    val w3 = getDistance(c1,c2)
-    val w4 = getDistance(c2,c1)
+    // w1 과 w3 의 방향을 고려하지 못해서 탈락
+    val w1 = getDistance(s,c1,-1)
+    val w2 = getDistance(s,c2,-1)
+    //val w3 = getDistance(c1,c2)
+    //val w4 = getDistance(c2,c1)
     var ans = Int.MAX_VALUE
-    if(w1!=-1 && w3!=-1) ans = (w1+w3).coerceAtMost(ans)
-    if(w2!=-1 && w4!=-1) ans = (w2+w4).coerceAtMost(ans)
+    //if(w1!=-1 && w3!=-1) ans = (w1+w3).coerceAtMost(ans)
+    // if(w2!=-1 && w4!=-1) ans = (w2+w4).coerceAtMost(ans)
     print(if(ans== Int.MAX_VALUE)-1 else ans)
 
 }
