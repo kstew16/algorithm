@@ -2,75 +2,37 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.LinkedList
 
-fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
-    val (n,m) = readLine().split(" ").map { it.toInt() }
-    val s = IntArray(2){-1}
-    val c1 = IntArray(2){-1}
-    val c2 = IntArray(2){-1}
-    val isRoad = Array(n){
-            y ->
-        val input = readLine().toCharArray()
-        BooleanArray(m){
-                x ->
-            var road:Boolean
-            if(input[x]=='#') road = false
-            else{
-                road = true
-                when(input[x]){
-                    'C' -> {
-                        if(c1.contains(-1)){
-                            c1[0] = y
-                            c1[1] = x
-                        }
-                        else{
-                            c2[0] = y
-                            c2[1] = x
-                        }
-                    }
-                    'S' -> {
-                        s[0] = y
-                        s[1] = x
-                    }
-                }
-            }
-            road
-        }
+fun main() = BufferedReader(InputStreamReader(System.`in`)).run{
+    val limit = 100001
+    val (s,t) = readLine().split(" ").map{it.toInt()}
+    val started = Array(limit){
+        BooleanArray(3){false}
     }
-    // 오른쪽 아래 왼쪽 위
-    val dy = intArrayOf(0,1,0,-1)
-    val dx = intArrayOf(1,0,-1,0)
-    // (d+2)%4 연산과 같음
-    // val opposite = intArrayOf(2,3,0,1)
-    fun getDistance(from:IntArray,to:IntArray):Int{
-        val (sY,sX) = from
-        val (tY,tX) = to
-        data class State(val y:Int, val x:Int, val direction:Int, val moved:Int)
-        val visited = Array(n){
-            BooleanArray(m){false}
-        }.apply { this[sY][sX] = true }
-        val queue = LinkedList<State>().apply{ add(State(sY,sX,-1,0))}
-        while(queue.isNotEmpty()){
-            val cur = queue.pollFirst()
-            if(cur.x==tX && cur.y==tY) return cur.moved
-            for(d in 0..3){
-                val ny = cur.y + dy[d]
-                val nx = cur.x + dx[d]
-                if(d!=cur.direction && ny in 0 until n && nx in 0 until m && isRoad[ny][nx] &&!visited[ny][nx]){
-                    visited[ny][nx] = true
-                    queue.add(State(ny,nx,d,cur.moved+1))
-                    queue.add(State(cur.y,cur.x,(d+2)%4,cur.moved+2))
-                }
+    var distance = Int.MAX_VALUE
+    var count = 0
+    val queue = LinkedList<IntArray>().apply{ add(intArrayOf(s,0)) }
+    while(queue.isNotEmpty()){
+        val (pos,curDist) = queue.pollFirst()
+        if(curDist>distance) continue
+        if(pos == t){
+            if(curDist < distance){
+                distance = curDist
+                count = 1
+            }else if(curDist == distance){
+                count += 1
+            }
+            continue
+        }
+        fun visit(source:Int, target:Int,dist:Int,type:Int){
+            if(target in 0 until limit && !started[source][type]){
+                started[source][type] = true
+                queue.add(intArrayOf(target,dist+1))
             }
         }
-        return -1
+        visit(pos,pos*2,curDist,0)
+        visit(pos,pos-1,curDist,1)
+        visit(pos,pos+1,curDist,2)
     }
-    val w1 = getDistance(s,c1)
-    val w2 = getDistance(s,c2)
-    val w3 = getDistance(c1,c2)
-    val w4 = getDistance(c2,c1)
-    var ans = Int.MAX_VALUE
-    if(w1!=-1 && w3!=-1) ans = (w1+w3).coerceAtMost(ans)
-    if(w2!=-1 && w4!=-1) ans = (w2+w4).coerceAtMost(ans)
-    print(if(ans== Int.MAX_VALUE)-1 else ans)
-
+    println(distance)
+    println(count)
 }

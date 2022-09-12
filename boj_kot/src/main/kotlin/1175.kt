@@ -41,66 +41,76 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val dx = intArrayOf(1,0,-1,0)
     // (d+2)%4 연산과 같음
     // val opposite = intArrayOf(2,3,0,1)
-    val arriveDirection = IntArray(4){Int.MAX_VALUE}
-    fun getDistance(from:IntArray,to:IntArray,lastDirection:Int):Int{
+    val arriveDistance = IntArray(4){Int.MAX_VALUE}
+    fun getDistance(from:IntArray,to:IntArray,lastDirection:Int){
         val (sY,sX) = from
         val (tY,tX) = to
         data class State(val y:Int, val x:Int, val direction:Int, val moved:Int)
         val visited = Array(n){
-            BooleanArray(m){false}
-        }.apply { this[sY][sX] = true }
+            Array(m){
+                BooleanArray(4){
+                    false
+                }
+            }
+        }
         val queue = LinkedList<State>().apply{ add(State(sY,sX,lastDirection,0))}
         while(queue.isNotEmpty()){
             val cur = queue.pollFirst()
             if(cur.x==tX && cur.y==tY) {
-                if(lastDirection!=-1) return cur.moved
-
-                arriveDirection[cur.direction] = cur.moved
-                if(arriveDirection.all{it!= Int.MAX_VALUE}) return 0
+                //if(lastDirection!=-1) return cur.moved
+                arriveDistance[cur.direction] = cur.moved.coerceAtMost(arriveDistance[cur.direction])
+                if (arriveDistance.all { it != Int.MAX_VALUE }) return
             }
+
             for(d in 0..3){
                 val ny = cur.y + dy[d]
                 val nx = cur.x + dx[d]
-                if(d!=cur.direction && ny in 0 until n && nx in 0 until m && isRoad[ny][nx] &&!visited[ny][nx]){
-                    visited[ny][nx] = true
-                    queue.add(State(ny,nx,d,cur.moved+1))
-                    queue.add(State(cur.y,cur.x,(d+2)%4,cur.moved+2))
+                if(d!=cur.direction && ny in 0 until n && nx in 0 until m && isRoad[ny][nx]){
+                    if(!visited[ny][nx][d]){
+                        visited[ny][nx][d] = true
+                        queue.add(State(ny,nx,d,cur.moved+1))
+                    }
                 }
             }
         }
-        return 0
+        return
     }
 
     var ans = Int.MAX_VALUE
 
-    // w1 과 w3 의 방향을 고려하지 못해서 탈락
     getDistance(s,c1,-1)
     val w1 = IntArray(4){
-        arriveDirection[it]
+        arriveDistance[it]
     }
 
-    w1.withIndex().forEach{
-        if(it.value != Int.MAX_VALUE){
-            ans = (getDistance(c1,c2,it.index) + it.value).coerceAtMost(ans)
+
+
+    w1.withIndex().forEach{ distance ->
+        if(distance.value != Int.MAX_VALUE){
+            for(i in 0..3) arriveDistance[i] = Int.MAX_VALUE
+            getDistance(c1,c2,distance.index)
+            arriveDistance.filter{it!=Int.MAX_VALUE}.minOfOrNull{it}?.let {
+                ans = (it + distance.value).coerceAtMost(ans)
+            }
         }
     }
-    for(i in 0..3) arriveDirection[i] = Int.MAX_VALUE
 
+    for(i in 0..3) arriveDistance[i] = Int.MAX_VALUE
     getDistance(s,c2,-1)
     val w2 = IntArray(4){
-        arriveDirection[it]
+        arriveDistance[it]
     }
 
-    w2.withIndex().forEach{
-        if(it.value != Int.MAX_VALUE){
-            ans = (getDistance(c2,c1,it.index) + it.value).coerceAtMost(ans)
+
+    w2.withIndex().forEach{ distance ->
+        if(distance.value != Int.MAX_VALUE){
+            for(i in 0..3) arriveDistance[i] = Int.MAX_VALUE
+            getDistance(c2,c1,distance.index)
+            arriveDistance.filter{it!=Int.MAX_VALUE}.minOfOrNull{it}?.let {
+                ans = (it + distance.value).coerceAtMost(ans)
+            }
         }
     }
-    //val w3 = getDistance(c1,c2)
-    //val w4 = getDistance(c2,c1)
-
-    //if(w1!=-1 && w3!=-1) ans = (w1+w3).coerceAtMost(ans)
-    // if(w2!=-1 && w4!=-1) ans = (w2+w4).coerceAtMost(ans)
     print(if(ans== Int.MAX_VALUE)-1 else ans)
 
 }
