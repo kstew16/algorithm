@@ -54,7 +54,4 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         }
     }
     print(ans.values.joinToString(" "))
-
-
-
 }
