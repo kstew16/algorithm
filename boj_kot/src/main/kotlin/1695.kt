@@ -5,8 +5,8 @@ import java.util.StringTokenizer
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val n = readLine().toInt()
     val st = StringTokenizer(readLine())
-    val arr = IntArray(n){st.nextToken().toInt()}
-    fun makeSame(a:IntArray,b:IntArray):Int{
+    val arr = List(n){st.nextToken().toInt()}
+    fun makeSame(a:MutableList<Int>,b:MutableList<Int>):Int{
         var count = 0
         var i = 0
         var lastFound = 0
@@ -33,7 +33,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     }
     var ans = Int.MAX_VALUE
     for(i in arr.indices){
-        ans = makeSame(arr.copyOfRange(0,i),arr.copyOfRange(i+1,n).reversed().toIntArray()).coerceAtMost(ans)
+        ans = makeSame(arr.slice(0 until i).toMutableList(),arr.slice(i+1 until n).reversed().toMutableList()).coerceAtMost(ans)
     }
     print(ans)
 }
