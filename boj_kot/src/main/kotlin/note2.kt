@@ -1,41 +1,36 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.StringTokenizer
 
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
-    val n = readLine().toInt()
-    val st = StringTokenizer(readLine())
-    val arr = List(n){st.nextToken().toInt()}
-    fun makeSame(a:List<Int>,b:List<Int>):Int{
-        if(a.isEmpty() || b.isEmpty()) return a.size+b.size
-        val target = a[0]
-        var index = b.indexOf(target)
-        if(index!=-1){
-            return if(index==0) makeSame(a.slice(1 until a.size),b.slice(1 until b.size))
-            else{
-                kotlin.math.min(
-                    // index 번째까지 다 삭제하고 같게 하는 경우
-                    makeSame(a.slice(1 until a.size),b.slice(index+1 until b.size))+index,
-                    // b 배열 맨 앞에 타겟을 놓는 것과 같은
-                    makeSame(a.slice(1 until a.size),b)+1
-                )
+    val (n,m) = readLine().split(" ").map{it.toInt()}
+    // visited[i][a][b][k] i 길이의 문자열에서 A 를 a 개, B 를 b 개, C 를 i-a-b 개 사용했을 때 k 값의 방문 가능 여부
+    val visited = Array(n+1){Array(n+1){Array(n+1){BooleanArray(1+n*(n-1)/2){false} } } }
+    val ans = CharArray(n)
+
+    fun solve(i:Int,a:Int,b:Int,k:Int):Boolean{
+        if(visited[n][a][b][m]) return true
+        if(i in 0 until n){
+            // 문자열에 a 를 추가하면 추가되는 k는 없음
+            if(a in 0 until n && !visited[i+1][a+1][b][k]) {
+                visited[i+1][a+1][b][k] = true
+                ans[i] = 'A'
+                if(solve(i+1,a+1,b,k)) return true
             }
-        }else return kotlin.math.min(
-            // a 배열 앞에다가 b 배열 놓기
-            a.size + b.size,
-            // b 배열 맨 앞에 타겟을 놓는 것과 같은
-            makeSame(a.slice(1 until a.size),b)+1
-        )
-    }
-    var ans = Int.MAX_VALUE
-    if(arr==arr.reversed()){
-        ans = 0
-    }
-    else {
-        for (i in arr.indices) {
-            ans = makeSame(arr.slice(0 until i), arr.slice(i + 1 until n).reversed()).coerceAtMost(ans)
-            if(i<arr.size-1 && arr[i]==arr[i+1]) ans = makeSame(arr.slice(0 until i), arr.slice(i + 2 until n).reversed()).coerceAtMost(ans)
+            // 문자열에 b 를 추가하면 현재 문자열의 a 값 만큼 k 가 증가됨
+            if(b in 0 until n && !visited[i+1][a][b+1][k+a]){
+                visited[i+1][a][b+1][k+a]=true
+                ans[i] = 'B'
+                if(solve(i+1,a,b+1,k+a)) return true
+            }
+            // 문자열에 c 를 추가하면 현재 문자열의 a,b 의 수만큼 k가 증가됨
+            if(i-a-b in 0 until n && !visited[i+1][a][b][k+a+b]) {
+                visited[i+1][a][b][k+a+b]=true
+                ans[i] = 'C'
+                if(solve(i+1,a,b,k+a+b)) return true
+            }
         }
+        return false
     }
-    print(ans)
+    if(solve(0,0,0,0)){print(ans.joinToString(""))}
+    else print(-1)
 }
