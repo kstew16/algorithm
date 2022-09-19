@@ -1,6 +1,6 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
+// dp 를 넣지 않으면 탐색이 시간초과가 뜨는 문제... dp 테이블을 다른 사람 코드에서 참고함
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val (n,m) = readLine().split(" ").map{it.toInt()}
     // visited[i][a][b][k] i 길이의 문자열에서 A 를 a 개, B 를 b 개, C 를 i-a-b 개 사용했을 때 k 값의 방문 가능 여부
