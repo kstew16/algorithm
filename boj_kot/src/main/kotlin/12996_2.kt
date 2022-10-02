@@ -1,6 +1,7 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
+// 한 수록곡이 늘어나면 그 노래를 처리할 방법은 7가지 뿐.
+// 여행 갔다와서 푼 거
 
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val divisor = 1000000007
