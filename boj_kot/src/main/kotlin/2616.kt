@@ -34,6 +34,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         }else{
             if(from<n-1) benefitMax = kotlin.math.max(benefit[from],getBenefit(t,from+1))
         }
+        println("filling $t $from")
         dp[t][from] = benefitMax
         return benefitMax
     }

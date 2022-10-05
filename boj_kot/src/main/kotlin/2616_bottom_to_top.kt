@@ -1,6 +1,7 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.StringTokenizer
+import kotlin.math.max
 
 
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
@@ -21,14 +22,16 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         sum = sum - arr[i-1] + arr[i+k-1]
         benefit[i] = sum
     }
-    // dp[t][i] i 이상의 인덱스에서 t+1 개의 열차를 선택했을 때 얻을 수 있는 최대 이득
-    val dp = Array(4){IntArray(n){0} }
-    for(i in 1 until 3){
-        for(j in i*k until   n){
+    // dp[t][i] i 이상의 인덱스에서 t 개의 열차를 선택했을 때 얻을 수 있는 최대 이득
+    val dp = Array(4){IntArray(n){0} }.apply {
+        for(i in n-k downTo 0) this[1][i] = max(this[1][i+1],benefit[i])
+    }
+    for(i in 2 .. 3){
+        for(j in n-k*(i-1)-1 downTo    0){
             // 나 다음 열차부터 다시 3개 고르기 vs 나 고르고 아래에서 고르기
-            dp[i][j] = kotlin.math.max(dp[i][j-1],dp[i-1][j-k]+benefit[i])
+            dp[i][j] =  max(dp[i][j+1],dp[i-1][j+k]+benefit[j])
         }
     }
-    print(dp[3].joinToString(" "))
+    print(dp[3][0])
 
 }
