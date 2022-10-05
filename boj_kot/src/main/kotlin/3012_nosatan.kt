@@ -1,6 +1,8 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
+import java.text.DecimalFormat
+// 고민을 굉장히 오래(4시간)했지만 결국 로직은 찾았고
+// 출력에 이상한 제약 (결과의 뒤의 5자리만 출력) 이 걸려있는데, 그거까지 기록해서 출력하는게 필요한 걸 질문 보고 알았음
 
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val n = readLine().toInt()
@@ -12,14 +14,17 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
             -1
         }
     }
+    val overflowed = Array(n+1){
+        BooleanArray(n+1){false}
+    }
     fun fillDP(i:Int,j:Int):Int{
         var value = 0
+        var overflow = false
         // 빈 문자열은 옳은 문자열이다
         if(i==j) value = 1
 
         // 이미 아는 값은 그대로
-        else if(dp[i][j]!=-1) value = dp[i][j]
-
+        else if(dp[i][j]!=-1)  return dp[i][j]
         else {
             val me = str[i]
             // 닫는 문자열로부터는 옳은 문자열은 시작하지 않는다
@@ -51,14 +56,30 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
                 }
                 for (k in i + 1 until j) {
                     if (str[k] in closingList){
-                        value += if(me=='?' && str[k]=='?') (3*((fillDP(i + 1, k) * fillDP(k + 1, j))%100000))%100000
-                        else (fillDP(i + 1, k) * fillDP(k + 1, j)) % 100000
+                        var longValue:Long
+                        var vA = fillDP(i + 1, k).toLong()
+                        var vB = fillDP(k + 1, j).toLong()
+                        longValue = if(me=='?' && str[k]=='?') vA*vB*3
+                        else vA*vB
+                        //if(i==0 && j==n) println("$vA * $vB = $longValue with $me from ${str[k]}")
+                        overflow = (vA!=0L && vB!=0L && (longValue>=100000||overflowed[i+1][k]||overflowed[k+1][j]))||overflow
+                        value += (longValue%100000).toInt()
                     }
                 }
             }
         }
-        dp[i][j] = value%100000
-        return dp[i][j]
+        value%=100000
+        dp[i][j]= value
+        overflowed[i][j] = overflow
+        return value
     }
-    print(fillDP(0,n))
+    fillDP(0,n)
+    print(
+        if(overflowed[0][n]){
+            val df = DecimalFormat("00000")
+            df.format(dp[0][n])
+        }else{
+            dp[0][n]
+        }
+    )
 }
