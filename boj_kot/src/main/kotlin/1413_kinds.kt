@@ -2,6 +2,11 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.StringTokenizer
 
+// 4시간 조금 넘게 걸렸음(요즘 왜 이렇게 오래 걸리는지 ㅜㅜ)
+// 전체 경우의 수를 어떻게 할 지 몰라서 오래 걸렸음 확률론적인 풀이는 사실 10분만에 나왔는데...
+// 확률론적인 문제는 분수로 확률 계산을 하기보다는 경우의 수를 따져보면서 구해야 하는데 (ULong 썼는데도 20!끼리 곱해져서 오버플로우남)
+// 이 전체 경우의 수에 대해서 모든 시도의 확률이 같다면 이를 배치하는 방법의 수 = 시도하는 순서의 경우의 수임
+// 그런데 이 경우의 수를 따질 때, 하위 dp 테이블 또한 배치에 따른 경우의 수를 포함하므로, 상위배치수/하위배치수 * 하위 dp 이렇게 해줘야 잘 나옴
 
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     val primeUnder20 = ulongArrayOf(2u,3u,5u,7u,11u,13u,17u,19u)
