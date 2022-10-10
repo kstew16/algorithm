@@ -2,6 +2,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.StringTokenizer
 // 수학적으로 엄밀하지 않은 풀이가 옳은 풀이인줄 알고 개선하느라 오래 걸림.. 아무래도 정형화된 방법을 우선적으로 써야 할 듯..
+// 조건이 3 개인데 한 개는 고정축으로 사용해야 하는 2차원 dp 문제였음
 fun main() {
     val st = StringTokenizer(BufferedReader(InputStreamReader(System.`in`)).readLine())
     val n = st.nextToken().toInt()
@@ -17,6 +18,9 @@ fun main() {
     val singularity = coolDown+1
     // dp[i][j] -> i 개의 곡을 사용한 길이 j 짜리 플레이리스트를 만드는 경우의 수
     val dp = Array(n+1){LongArray(length+1)}.apply {
+        // n==p 인 경우 쿨다운에 관계 없이 n! 개의 플리가 존재함
+        for(i in 0 until singularity) this[i][i] = fact(i)
+        // 설명은 하단 참조
         if(singularity<=n)for(i in singularity..length)this[singularity][i] = fact(singularity)
     }
     /*

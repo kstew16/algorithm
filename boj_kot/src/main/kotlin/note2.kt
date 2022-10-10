@@ -1,36 +1,30 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-// dp 를 넣지 않으면 탐색이 시간초과가 뜨는 문제... dp 테이블을 다른 사람 코드에서 참고함
-fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
-    val (n,m) = readLine().split(" ").map{it.toInt()}
-    // visited[i][a][b][k] i 길이의 문자열에서 A 를 a 개, B 를 b 개, C 를 i-a-b 개 사용했을 때 k 값의 방문 가능 여부
-    val visited = Array(n+1){Array(n+1){Array(n+1){BooleanArray(1+n*(n-1)/2){false} } } }
-    val ans = CharArray(n)
+import java.util.StringTokenizer
+// 12872 제출용
+fun main() {
+    for(n in 1 .. 100){
+        for(coolDown in 0..n){
+            for(length in n..100){
+                val nom = 1000000007L
 
-    fun solve(i:Int,a:Int,b:Int,k:Int):Boolean{
-        if(visited[n][a][b][m]) return true
-        if(i in 0 until n){
-            // 문자열에 a 를 추가하면 추가되는 k는 없음
-            if(a in 0 until n && !visited[i+1][a+1][b][k]) {
-                visited[i+1][a+1][b][k] = true
-                ans[i] = 'A'
-                if(solve(i+1,a+1,b,k)) return true
-            }
-            // 문자열에 b 를 추가하면 현재 문자열의 a 값 만큼 k 가 증가됨
-            if(b in 0 until n && !visited[i+1][a][b+1][k+a]){
-                visited[i+1][a][b+1][k+a]=true
-                ans[i] = 'B'
-                if(solve(i+1,a,b+1,k+a)) return true
-            }
-            // 문자열에 c 를 추가하면 현재 문자열의 a,b 의 수만큼 k가 증가됨
-            if(i-a-b in 0 until n && !visited[i+1][a][b][k+a+b]) {
-                visited[i+1][a][b][k+a+b]=true
-                ans[i] = 'C'
-                if(solve(i+1,a,b,k+a+b)) return true
+                fun fact(k:Int):Long{
+                    var ans = 1L
+                    for(i in 2..k) ans = (ans*i.toLong())%nom
+                    return ans
+                }
+                val singularity = coolDown+1
+                val dp = Array(n+1){LongArray(length+1)}.apply {
+                    if(singularity<=n)for(i in singularity..length)this[singularity][i] = fact(singularity)
+                }
+                for(i in (singularity+1)..n){
+                    for(j in i..length){
+                        dp[i][j] = (((i-coolDown).toLong()*dp[i][j-1])%nom + (i.toLong()*dp[i-1][j-1])%nom)%nom
+                    }
+                }
+                println(dp[n][length])
             }
         }
-        return false
+
     }
-    if(solve(0,0,0,0)){print(ans.joinToString(""))}
-    else print(-1)
 }
