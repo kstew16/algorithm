@@ -112,8 +112,6 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))) {
                     }
                     // 목적지에 뭐 있으면 아무 일도 일어나지 않음
                 }
-                print("")
-
             }
             when(cmd[i]){
                 'U'-> moveCharacter(0)
