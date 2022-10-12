@@ -14,7 +14,6 @@ fun main( ) = with(BufferedReader(InputStreamReader(System.`in`))){
         else for(i in 0 until 4) add[i] = (add[i] and address[i])
     }
     bw.write("${add.joinToString(".")}\n")
-        else for(j in 0 until 8){
     var addInt = 0
     for(i in 0 until 4) addInt += (add[3-i].toInt())*(1 shl 8*i)
     var maskInt = 0
