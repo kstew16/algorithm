@@ -30,10 +30,18 @@ fun main( ) = with(BufferedReader(InputStreamReader(System.`in`))){
             }
         }
     }
-    add = (mask and lastAddress)
     fun UInt.toIPAddress():String{
-        return this.toString(2).chunked(8).map{it.toInt(2)}.joinToString(".")
+        var sb = java.lang.StringBuilder("")
+        val str = this.toString(2)
+        if(str.length!=32){
+            for(i in 0 until (32-str.length)) sb.append(0)
+        }
+        sb.append(str)
+        return sb.toString().chunked(8).map{it.toInt(2)}.joinToString(".")
     }
+
+    add = (mask and lastAddress)
+
     bw.write(add.toIPAddress())
     bw.write("\n")
     bw.write(mask.toIPAddress())
