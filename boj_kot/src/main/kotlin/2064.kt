@@ -12,22 +12,28 @@ fun main( ) = with(BufferedReader(InputStreamReader(System.`in`))){
         val address = readLine().split(".").map{it.toUByte()}
         if(addNum==0) for(i in 0 until 4) add[i] = address[i]
         else for(i in 0 until 4) add[i] = (add[i] and address[i])
-        //for(i in 0 until 4) lastAddress[i] = address[i]
-        //if(addNum!=0) for(i in 0 until 4) mask[i] = mask[i] and (lastAddress[i] xor add[i]).inv()
     }
     bw.write("${add.joinToString(".")}\n")
-    var count0 = 0
-    var count1 = 0
-    for(i in 0 until 4){
-        if(count0!=0) count0+=4
-        else if(add[i]== UByte.MAX_VALUE) count1 +=4
         else for(j in 0 until 8){
-            if(((1 shl j) and add[i].toInt())==1){
-                count0 = j+1
-                count1 += (7-j)
-                break
-            }
+    var addInt = 0
+    for(i in 0 until 4) addInt += (add[3-i].toInt())*(1 shl 8*i)
+    var maskInt = 0
+    var found = false
+    for(i in 0 until 32){
+        if((1 and (addInt shr i)) == 1 || found){
+            found = true
+            maskInt = maskInt or (1 shl i)
         }
     }
-
+    for(i in 0 until 4) mask[i] = (maskInt shr (3-i)*8).toUByte()
+    bw.write(mask.joinToString("."))
+    bw.flush()
+    bw.close()
+    /*
+    3
+127.40.64.0
+127.40.65.124
+127.40.127.33
+     */
+    close()
 }
