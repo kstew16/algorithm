@@ -12,7 +12,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         for(i in l..l+9) for(j in d..d+9) field[j][i] = true
     }
     fun maxExtensionArea(py:Int,px:Int):Int{
-        val dy = -1
+        val dy = 1
         val dx = 1
         var y = py
         var x:Int
