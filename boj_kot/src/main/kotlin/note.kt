@@ -1,25 +1,45 @@
 import java.io.BufferedReader
-import java.io.BufferedWriter
 import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.util.StringTokenizer
 
 fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
-    val bw = BufferedWriter(OutputStreamWriter(System.`out`))
-    for(c in 1..41){
-        val caseArr = IntArray(c){it+1}
-        val limit = caseArr.maxOf{it}
-        val dp = Array(limit+1){IntArray(2)}.apply{this[0][0] = 1
-            if(limit>0)this[1][1] = 1
-        }
-        for(i in 2..limit){
-            dp[i][0] = dp[i-1][0] + dp[i-2][0]
-            dp[i][1] = dp[i-1][1] + dp[i-2][1]
-        }
-        caseArr.forEach{
-            bw.write("${dp[it][0]} ${dp[it][1]}\n")
-        }
+    fun StringTokenizer.getInt() = this.nextToken().toInt()
+    var st = StringTokenizer(readLine())
+    val n = st.getInt(); val p = st.getInt()
+    val redPill = BooleanArray(n+1){false}
+    st = StringTokenizer(readLine())
+    repeat(st.getInt()){redPill[st.getInt()] = true}
 
+    val visited = IntArray(p){-1}
+    val subVisited = BooleanArray(p)
+    val party = Array(p){
+        st = StringTokenizer(readLine())
+        IntArray(st.getInt()){
+            st.getInt()
+        }
     }
-    bw.flush()
-    bw.close()
+    fun getConnected(visiting:Int,source:Int){
+        visited[visiting] = source
+        subVisited[visiting] = true
+        party[visiting].forEach {
+            redPill[it] = true
+        }
+        l@for(i in 0 until p){
+            if(!subVisited[i] && visited[i]==-1){
+                subVisited[i] = true
+                for(j in party[i].indices){
+                    if(redPill[party[i][j]]) continue@l
+                }
+                getConnected(i,source)
+            }
+        }
+    }
+    var ans = 0
+    for(i in 0 until p){
+        if(visited[i]==-1) {
+            getConnected(i,i)
+            ans = (visited.count { it==i }).coerceAtLeast(ans)
+        }
+    }
+    print(ans)
 }
