@@ -19,11 +19,13 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
             var ny = this.p.y + dy[d]*speed
             var nx = this.p.x + dx[d]*speed
             while(ny!in 1..n){
-                if(ny<1) ny+=n
+                if(ny==0) ny = n
+                else if(ny<0) ny=(ny+speed*n)%n
                 else ny%=n
             }
             while(nx!in 1..n){
-                if(nx<1) nx+=n
+                if(nx==0) nx = n
+                else if(nx<0) nx=(nx+speed*n)%n
                 else nx%=n
             }
             this.p.y = ny
