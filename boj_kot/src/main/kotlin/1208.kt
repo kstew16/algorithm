@@ -1,7 +1,8 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.StringTokenizer
-
+// 생각에 한 시간 구현에 한 시간, 이분탐색 거의 처음 풀어본 듯?
+// mutableMap 은 내가 키가 삽입 순서대로 저장되는 등 내가 원하지 않는 기능까지 포함하기 위한 인스턴스를 생성할 수 있음
 fun main(args: Array<String>):Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     var st = StringTokenizer(readLine())
     fun StringTokenizer.getInt() = this.nextToken().toInt()
@@ -14,8 +15,8 @@ fun main(args: Array<String>):Unit = with(BufferedReader(InputStreamReader(Syste
         if(from==to) return if(targetValue==arr[from]) 1 else 0
         var ans = 0L
         var mid = (from+to)/2
-        val sumTableL = mutableMapOf <Int,Int>()
-        val sumTableR = mutableMapOf <Int,Int>()
+        val sumTableL = hashMapOf <Int,Int>()
+        val sumTableR = hashMapOf <Int,Int>()
         // 매번 더하는 것보다 더하는 거에서 빼는 게 더 빨라 테이블은 걔들이 작성하도록
         var curLeft = 0
         for(i in from..mid) curLeft += arr[i]
@@ -37,7 +38,7 @@ fun main(args: Array<String>):Unit = with(BufferedReader(InputStreamReader(Syste
             val subTarget = targetValue-t
             if(sumTableR.containsKey(subTarget)) ans+=u.toLong()*sumTableR[subTarget]!!.toLong()
         }
-        return ans + divideAndSolve(from,mid,curLeft,0) + divideAndSolve(mid+1,to,curRight,0)
+        return ans + divideAndSolve(from,mid,curLeft,targetValue) + divideAndSolve(mid+1,to,curRight,targetValue)
     }
     print(divideAndSolve(0,n-1,totalSum,target))
 }
