@@ -1,8 +1,9 @@
 fun main(){
 
-    println(1)
-    println(20)
-    for(i in 0 until 20){
-        println("${100000-i*10000} ${100000-i*10000}")
+    val alphabet = CharArray(26).apply{
+        run { ('A'..'Z').forEachIndexed { index, c -> this[index] = c } }
+    }
+    for(i in 0 until 2500){
+        print(alphabet[i%alphabet.size])
     }
 }
