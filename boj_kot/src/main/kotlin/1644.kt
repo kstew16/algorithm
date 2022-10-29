@@ -28,26 +28,24 @@ fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
         }
         return output
     }
-    for(n in 3000000..4000000){
-        if(n%40000==0) println(n/40000)
-        val primeArr = eratosthenes(1,n).toIntArray()
-        var localSum = 0L
-        val primeAccSum = LongArray(primeArr.size){
-            localSum += primeArr[it]
-            localSum
-        }
-        var count = 0
-        val limit = primeArr.size
-        for(i in 0 until limit){
-            if(primeAccSum[i] == n.toLong()) count+=1
-            for(j in i+1 until limit){
-                val primeSumFromItoJ = primeAccSum[j]-primeAccSum[i]
-                if(primeSumFromItoJ>n) break
-                else if(primeSumFromItoJ== n.toLong()) count+=1
-            }
+    val n = readLine().toInt()
+    val primeArr = eratosthenes(1,n).toIntArray()
+    var localSum = 0L
+    val primeAccSum = LongArray(primeArr.size){
+        localSum += primeArr[it]
+        localSum
+    }
+    var count = 0
+    val limit = primeArr.size
+    for(i in 0 until limit){
+        if(primeAccSum[i] == n.toLong()) count+=1
+        for(j in i+1 until limit){
+            val primeSumFromItoJ = primeAccSum[j]-primeAccSum[i]
+            if(primeSumFromItoJ>n) break
+            else if(primeSumFromItoJ== n.toLong()) count+=1
         }
     }
-    print("jobs done")
+    print(count)
 
 }
 
