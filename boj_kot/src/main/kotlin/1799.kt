@@ -1,7 +1,7 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-
+// 답 보고도 푸는데 한참 걸려서 죽을 뻔 했다 ^^ 다시풀러왔냐? 참고로 이문제 완성코드 이쁨(literally)^^ '참고'해라~~
 fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     fun StringTokenizer.getInt() = this.nextToken().toInt()
     var st = StringTokenizer(readLine())
@@ -12,59 +12,33 @@ fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
             st.getInt() == 1
         }
     }
-    var maxDepth = 0
-    val dx = intArrayOf(1,1,-1,-1)
-    val dy = intArrayOf(1,-1,-1,1)
-    data class Point(var y:Int,var x:Int)
-    fun dfs(y:Int,x:Int,depth:Int){
-        canPlace[y][x] = false
-        //val changed = Array(n){BooleanArray(n)}
-        val changedCoord = Array(n*2){Point(-1,-1)}
-        var changedCount = 0
-        l1@ for(j in 0 until 4){
-            for(i in 1 until n){
-                val ny = y + dy[j]*i
-                val nx = x + dx[j]*i
-                if(ny !in 0 until n || nx !in 0 until n) continue@l1
-                else if(canPlace[ny][nx]){
-                    val p = changedCoord[changedCount++]
-                    p.x = nx
-                    p.y = ny
-                    canPlace[ny][nx] = false
-                }
-            }
+    val maxDepth = IntArray(2)
+    val diagonalVisitedN = BooleanArray(2*(n-1)+1) // x-y + (n-1) 가 같은 좌표 들의 음의 기울기 대각선
+    val diagonalVisitedP = BooleanArray(2*(n-1)+1) // x+y 가 같은 좌표들의 양의 기울기 대각선
+    fun dfs(y:Int,x:Int,depth:Int,color:Int){
+        val dn = x-y+(n-1)
+        val dp = x+y
+        var nx = x + 2
+        var ny = y
+        if(nx>=n) {
+            ny+=1
+            nx = (ny+color)%2
         }
-        maxDepth = depth.coerceAtLeast(maxDepth)
-        for(j in 0 until n) {
-            for (i in 0 until n) {
-                if (canPlace[j][i]) {
-                    dfs(j, i, depth + 1)
-                }
-            }
+        val hasNext = ny<n
+        // 이번 칸에 비숍을 넣을 수 있는 경우
+        if(canPlace[y][x] && !diagonalVisitedP[dp] && !diagonalVisitedN[dn]){
+            diagonalVisitedP[dp] = true
+            diagonalVisitedN[dn] = true
+            if(hasNext) dfs(ny,nx,depth+1,color)
+            else maxDepth[color] = (depth+1).coerceAtLeast(maxDepth[color])
+            diagonalVisitedP[dp] = false
+            diagonalVisitedN[dn] = false
         }
-        /*
-        for(j in 0 until n) {
-            for (i in 0 until n) {
-                if (changed[j][i]) {
-                    canPlace[y][x] = true
-                }
-            }
-        }
-         */
-        while(changedCount>0){
-            changedCount-=1
-            val p = changedCoord[changedCount]
-            canPlace[p.y][p.x] = true
-        }
-        canPlace[y][x] = true
+        // 이번 칸에 비숍을 넣을 수 있든 말든
+        if(hasNext) dfs(ny,nx,depth,color)
+        else maxDepth[color] = (depth).coerceAtLeast(maxDepth[color])
     }
-
-    for(j in 0 until n){
-        for(i in 0 until n){
-            if(canPlace[j][i]){
-                dfs(j,i,1)
-            }
-        }
-    }
-    print(maxDepth)
+    dfs(0,0,0,0)
+    dfs(0,1,0,1)
+    print(maxDepth[0]+maxDepth[1])
 }
