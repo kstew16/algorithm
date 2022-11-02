@@ -57,6 +57,7 @@ fun main() : Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     var sum = 0
     val queue = LinkedList<Int>().apply { this.add(villageA) }
     val visited = BooleanArray(n+1).apply { this[villageA] = true }
+    // 와 근본없는 프림이다
     while (queue.isNotEmpty()){
         val cur = queue.pollFirst()
         newMap[cur].forEach {
