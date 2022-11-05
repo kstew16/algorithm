@@ -3,11 +3,16 @@ import java.io.InputStreamReader
 import kotlin.math.sqrt
 
 fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
-    println("32000 10000")
-    for(j in 0 until 10){
-        for(i in 0 until 1000){
-            println("${32000-1000*j} ${(32000-1000*j)-(i+1)*2}")
+    println(16)
+    val map = Array(16){IntArray(16)}
+    for(s in 0 until 16){
+        for(e in 0 until 16){
+            if(s==e) map[s][e] = 0
+            else map[s][e] = (1000000-s-e)
         }
+    }
+    for(i in 0 until 16){
+        println(map[i].joinToString(" "))
     }
 }
 
