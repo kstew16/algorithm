@@ -9,13 +9,11 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         IntArray(2){-1}
     }
 
-    // 나중에 repeat 로
     repeat(n){ y ->
         val st = StringTokenizer(readLine())
         repeat(n){ x->
             val input = st.nextToken().toInt()
             targetCoord[input-1] = intArrayOf(y,x)
-            input
         }
     }
 
@@ -102,5 +100,4 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
         }
     }
     print(arrivedDistance[n*n-2].minOf { it })
-    //print(ans)
 }
