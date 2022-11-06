@@ -6,6 +6,7 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
     fun StringTokenizer.getInt() = this.nextToken().toInt()
     var st = StringTokenizer(readLine())
     val target = st.getInt()
+    // 최빈 1,000,000
     val record = hashMapOf<Int,Int>()
     val aSize = StringTokenizer(readLine()).getInt()
     st = StringTokenizer(readLine())
@@ -31,13 +32,13 @@ fun main() = with(BufferedReader(InputStreamReader(System.`in`))){
             }
         }
     }
-    var targetCount = 0
+    var targetCount = 0L
     for(i in 0 until bSize){
         for(j in -1 until i){
             val sumUntilI = accB[i]
             targetCount += if(j==-1) record.getOrDefault(target-sumUntilI,0)
             else{
-                val sumUntilJ = accA[j]
+                val sumUntilJ = accB[j]
                 record.getOrDefault(target-(sumUntilI-sumUntilJ),0)
             }
         }
