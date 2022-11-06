@@ -3,7 +3,8 @@ import kotlin.math.sqrt
 fun main(){
     infix fun Int.on(i:Int) = this or (1 shl i)
     infix fun Int.off(i:Int) = this and (1 shl i).inv()
-    infix fun Int.chk(i:Int) = this and (1 shl i)>=1
+    infix fun Int.chk(i:Int) = (this shr i) and 1 == 1
+    //infix fun Int.chk(i:Int) = this and (1 shl i)>=1
 
 
     // CharArray 를 eval 해주는 코드
