@@ -1,12 +1,11 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
-// 선분교차 알고리즘 열심히 다른문제 틀려가며 연습하고 유니온파인드 틀림 ㅋㅋㅋㅋㅋ
+
 fun main() : Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     var st:StringTokenizer
-    fun StringTokenizer.getInt() = this.nextToken().toInt()
-    val n = readLine().toInt()
-    class Point(val x:Int, val y:Int): Comparable<Point>{
+    fun StringTokenizer.getLong() = this.nextToken().toLong()
+    class Point(val x:Long, val y:Long): Comparable<Point>{
         override fun compareTo(other:Point): Int {
             return when{
                 this.x<other.x -> -1
@@ -19,7 +18,7 @@ fun main() : Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     }
     fun getCurl(p1:Point,p2:Point,p3:Point):Int{
         var s = (p1.x*p2.y + p2.x*p3.y + p3.x*p1.y) - (p2.x*p1.y + p3.x*p2.y + p1.x*p3.y)
-        return if(s>0) 1 else if(s==0) 0 else -1
+        return if(s>0) 1 else if(s==0L) 0 else -1
     }
     class Line(var point1:Point, var point2:Point){
         fun isIntersect(l2:Line):Boolean{
@@ -54,40 +53,10 @@ fun main() : Unit = with(BufferedReader(InputStreamReader(System.`in`))){
         }
     }
 
-    val lines = Array(n){
+    val lines = Array(2) {
         st = StringTokenizer(readLine())
-        Line(Point(st.getInt(), st.getInt()), Point(st.getInt(), st.getInt()))
+        Line(Point(st.getLong(), st.getLong()), Point(st.getLong(), st.getLong()))
     }
+    print(if(lines[0].isIntersect(lines[1])) 1 else 0)
 
-    val parent = IntArray(n){it}
-    fun find(x:Int):Int{
-        if(parent[x]==x) return x
-        parent[x] = find(parent[x])
-        return  parent[x]
-    }
-
-    fun union(x:Int,y:Int){
-        val px = find(x)
-        val py = find(y)
-        if(px==py) return
-        else if(py<px) parent[px] = py
-        else parent[py] = px
-    }
-
-    for(i in 0 until n){
-        for(j in i+1 until n){
-            if(lines[j].isIntersect(lines[i]))union(i,j)
-        }
-    }
-
-
-    val count = hashMapOf<Int,Int>()
-    for(i in 0 until n){
-        // 최종갱신
-        find(i)
-        val curParent = parent[i]
-        count[curParent] = count.getOrDefault(curParent,0) + 1
-    }
-    println(count.keys.size)
-    print(count.values.maxOf { it })
 }
