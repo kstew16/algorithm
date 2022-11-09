@@ -1,3 +1,5 @@
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import kotlin.math.sqrt
 
 fun main(){
@@ -67,4 +69,21 @@ fun main(){
         }
         return output
     }
+
+    val n = BufferedReader(InputStreamReader(System.`in`)).readLine().toInt()
+    val parent = IntArray(n){it}
+    fun find(x:Int):Int{
+        if(parent[x]==x) return x
+        parent[x] = find(parent[x])
+        return  parent[x]
+    }
+
+    fun union(x:Int,y:Int){
+        val px = find(x)
+        val py = find(y)
+        if(px==py) return
+        else if(py<px) parent[px] = py
+        else parent[py] = px
+    }
+    // 마지막에 find(i) 다 해줘야 뿌리들 다시 찾아감
 }
