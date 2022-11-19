@@ -6,41 +6,47 @@ fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     val arr2 = readLine().toCharArray()
     val sizeA = arr1.size
     val sizeB = arr2.size
+    // a 에서 문자열 1 끝까지, b 에서 문자열 2 끝까지 사용했을 때 얻을 수 있는 LCS 의 길이
     val dp = Array(sizeA+1){IntArray(sizeB+1){-1} }
-    val lcs = Array(sizeA+1){Array(sizeB+1){StringBuilder("")} }
-    fun getLCS(a:Int,b:Int):Pair<Int,StringBuilder>{
+    // 그 LCS 를 만드는 다음 문자가 dp 어디에서 온 건지
+    val next = Array(sizeA+1){Array(sizeB+1){Pair(-1,-1)} }
+    fun getLCS(a:Int,b:Int):Pair<Int, Pair<Int,Int>>{
         var maxLen = 0
-        var sb = StringBuilder("")
-        if(a==sizeA || b==sizeB) return Pair(maxLen,sb)
-        if(dp[a][b]!=-1) return Pair(dp[a][b],lcs[a][b])
+        var usingCharIndex = Pair(-1,-1)
+        if(a==sizeA || b==sizeB) return Pair(maxLen,usingCharIndex)
+        if(dp[a][b]!=-1) return Pair(dp[a][b],next[a][b])
         if(arr1[a]==arr2[b]){
-            sb.append(arr1[a])
             with(getLCS(a+1,b+1)){
                 maxLen = this.first+1
-                sb.append(this.second)
+                next[a][b] = this.second
             }
         }
         with(getLCS(a,b+1)){
             if(this.first>maxLen){
                 maxLen = this.first
-                sb = this.second
+                next[a][b] = this.second
             }
         }
         with(getLCS(a+1,b)){
             if(this.first>maxLen){
                 maxLen = this.first
-                sb = this.second
+                next[a][b] = this.second
             }
         }
         dp[a][b] = maxLen
-        lcs[a][b] = sb
-        return Pair(maxLen,sb)
+        //next[a][b] = usingCharIndex
+        return Pair(maxLen,next[a][b])
     }
     with(getLCS(0,0)){
         println(this.first)
         if(this.first!=0){
-            println(this.second)
+            var i = this.second
+            var sb = StringBuilder("")
+            while(i.first!=-1 && i.second!=-1){
+                if(arr1[i.first]==arr2[i.second]) sb.append(arr1[i.first])
+                i = next[i.first][i.second]
+            }
+            print(sb)
         }
     }
-
 }
