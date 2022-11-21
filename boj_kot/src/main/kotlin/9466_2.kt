@@ -3,7 +3,9 @@ import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.util.StringTokenizer
-
+// 아니 IDE 에서 스택 오버플로우 나길래 안 될 줄 알았는데 꼬리재귀(리턴에 연산없는거) 써도 안되는거임
+// 그냥 제출했더니 맞네 제가 스택크기를 키우겠습니다 ㅜ
+// 문제 테스트 해 볼 때는 문제 제한에 맞게 실행 구성을 설정하자... -Xss256m -Xmx256m
 fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     val t = readLine().toInt()
     val bw = BufferedWriter(OutputStreamWriter(System.`out`))
