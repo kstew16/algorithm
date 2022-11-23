@@ -15,8 +15,10 @@ fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
         if(a==sizeA || b==sizeB) return 0
         if(dp[a][b]!=0) return dp[a][b]
         if(arr1[a]==arr2[b]) maxLen = getLCS(a+1,b+1)+1
-        maxLen = getLCS(a, b + 1).coerceAtLeast(maxLen)
-        maxLen = getLCS(a + 1, b).coerceAtLeast(maxLen)
+        else{
+            maxLen = getLCS(a, b + 1).coerceAtLeast(maxLen)
+            maxLen = getLCS(a + 1, b).coerceAtLeast(maxLen)
+        }
         dp[a][b] = maxLen
         return maxLen
     }
