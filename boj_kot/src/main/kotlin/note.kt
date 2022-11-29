@@ -30,15 +30,6 @@ fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
             m = dpCount[n]
             mv = n
         }
-        /*
-        var i = n
-        while(i!=1){
-            bw.write("$i ")
-            i = dpRoute[i]
-        }
-        bw
-        .write("1\n")
-         */
     }
     //bw.flush()
     println(m)
