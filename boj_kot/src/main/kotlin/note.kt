@@ -1,38 +1,33 @@
 import java.io.BufferedReader
-import java.io.BufferedWriter
 import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.util.LinkedList
 
-fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
-    var m = 0
-    var mv = 0
-    val bw = BufferedWriter(OutputStreamWriter(System.out))
-    for(n in 1..1000000){
-        val dpCount = IntArray(n+1){ Int.MAX_VALUE}.apply { this[1] = 0 }
-        // dpR[i] i 를 1 과 가장 가깝게 만드는 다음 수가 무엇인가
-        val dpRoute = IntArray(n+1)
-        for(i in 1 until n){
-            val curCount = dpCount[i]+1
-            val target = intArrayOf(i*3,i*2,i+1)
-            target.forEach {t ->
-                if(t<=n){
-                    val nextCount = dpCount[t]
-                    if(nextCount>curCount){
-                        dpCount[t] = curCount
-                        dpRoute[t] = i
-                    }
-                }
-            }
-        }
-
-
-        if(m>dpCount[n]){
-            m = dpCount[n]
-            mv = n
+fun main():Unit{
+    val n = BufferedReader(InputStreamReader(System.`in`)).readLine().toInt()
+    //0 정과 1 전산관 2 미래관 3 신앙관 4 진리관 5 한경직기념관 6 학생회관 7 형남공학관
+    val map = arrayOf(
+        mutableListOf(1,2),
+        mutableListOf(0,2,3),
+        mutableListOf(0,1,3,5),
+        mutableListOf(1,2,4,5),
+        mutableListOf(3,5,6),
+        mutableListOf(2,3,4,7),
+        mutableListOf(4,7),
+        mutableListOf(5,6)
+    )
+    // d p[i][j] i%2 분 후에 j 번 건물에 머물고 있을 수 있는 경우의 수 어라? 규칙성 있나
+    val visited = Array(8){ mutableSetOf<Int>() }
+    data class Node(val num:Int,val turn:Int)
+    val queue = LinkedList<Node>().apply { this.add(Node(0,0)) }
+    var i = 0
+    while(i<=n){
+        val cur = queue.pollFirst()
+        if(cur.turn!=i)
+            i = cur.turn
+        visited[cur.num].add(cur.turn)
+        map[cur.num].forEach {
+            queue.add(Node(it,cur.turn+1))
         }
     }
-    //bw.flush()
-    println(m)
-    println(mv)
-    close()
+
 }
