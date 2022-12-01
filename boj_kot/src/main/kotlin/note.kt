@@ -2,32 +2,66 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.LinkedList
 
-fun main():Unit{
-    val n = BufferedReader(InputStreamReader(System.`in`)).readLine().toInt()
-    //0 정과 1 전산관 2 미래관 3 신앙관 4 진리관 5 한경직기념관 6 학생회관 7 형남공학관
-    val map = arrayOf(
-        mutableListOf(1,2),
-        mutableListOf(0,2,3),
-        mutableListOf(0,1,3,5),
-        mutableListOf(1,2,4,5),
-        mutableListOf(3,5,6),
-        mutableListOf(2,3,4,7),
-        mutableListOf(4,7),
-        mutableListOf(5,6)
-    )
-    // d p[i][j] i%2 분 후에 j 번 건물에 머물고 있을 수 있는 경우의 수 어라? 규칙성 있나
-    val visited = Array(8){ mutableSetOf<Int>() }
-    data class Node(val num:Int,val turn:Int)
-    val queue = LinkedList<Node>().apply { this.add(Node(0,0)) }
-    var i = 0
-    while(i<=n){
-        val cur = queue.pollFirst()
-        if(cur.turn!=i)
-            i = cur.turn
-        visited[cur.num].add(cur.turn)
-        map[cur.num].forEach {
-            queue.add(Node(it,cur.turn+1))
+fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
+    val on = Array(10){ readLine().map { it=='O' }.toBooleanArray() }
+    val switched = Array(10){BooleanArray(10){false} }
+    val dx = intArrayOf(0,1,0,-1,0)
+    val dy = intArrayOf(0,0,1,0,-1)
+    fun isValidCandidate(y:Int,x:Int,currentOn:Array<BooleanArray>):Boolean{
+        var valid = true
+        var onCount = 0
+        for(i in 0..4){
+            val ny = y + dy[i]
+            val nx = x + dx[i]
+            if(ny !in 0 until 10 || nx !in 0 until 10){
+                valid = false
+                break
+            }
+            if(currentOn[ny][nx]) onCount+=1
         }
+        if(valid && onCount<3) valid = false
+        return valid
     }
 
+    data class Node(val y:Int, val x:Int)
+    val queue = LinkedList<Node>()
+    val field = Array(10){y->
+        BooleanArray(10){x->
+            if(isValidCandidate(y,x,on)) queue.add(Node(y,x))
+            on[y][x]
+        }
+    }
+    var distance = 0
+    while(queue.isNotEmpty()){
+        val curCandidate = queue.pollFirst()
+        if(switched[curCandidate.y][curCandidate.x]) continue
+        if(isValidCandidate(curCandidate.y,curCandidate.x,field)){
+            switched[curCandidate.y][curCandidate.x] = true
+            distance+=1
+            for(i in 0..4){
+                val ny = curCandidate.y + dy[i]
+                val nx = curCandidate.x + dx[i]
+                field[ny][nx] = !field[ny][nx]
+            }
+            val visualized = Array(10){y-> field[y].map { if(it)'O' else '#' }.toCharArray()}
+            for(i in 1..4){
+                val ny = curCandidate.y + dy[i]
+                val nx = curCandidate.x + dx[i]
+                if(isValidCandidate(ny,nx,field) && !switched[ny][nx]) queue.add(Node(ny,nx))
+            }
+        }
+
+
+    }
+    var solved = true
+    l1@for(i in 0 until 10){
+        for(j in 0 until 10){
+            if(field[i][j]) {
+                solved = false
+                break@l1
+            }
+        }
+    }
+    if(solved) print(distance)
+    else print(-1)
 }
