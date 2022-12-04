@@ -86,4 +86,20 @@ fun main(){
         else parent[py] = px
     }
     // 마지막에 find(i) 다 해줘야 뿌리들 다시 찾아감
+
+    fun matrixMultiply(a:Array<IntArray>,b:Array<IntArray>):Array<IntArray>{
+        val y1 = a.size
+        val x1y2 = b.size
+        val x2 = b[0].size
+        val ans = Array(y1){y->
+            IntArray(x2){x->
+                var sum = 0
+                for(i in 0 until x1y2){
+                    sum = sum + b[i][x]*a[y][i]
+                }
+                sum
+            }
+        }
+        return ans
+    }
 }

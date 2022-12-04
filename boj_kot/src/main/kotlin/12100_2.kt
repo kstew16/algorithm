@@ -3,7 +3,8 @@ import java.io.InputStreamReader
 import java.util.LinkedList
 import java.util.StringTokenizer
 import kotlin.math.pow
-
+// 한번에 맞긴 했는데 빠른 게 있더라
+// 매번 계산하지 말고 보드를 들고다니자~~
 fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     val n = readLine().toInt()
     class Block(var merged:Boolean, var weight:Int){
@@ -21,7 +22,6 @@ fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     }
 
 
-    val command = IntArray(5)
     fun setGravity(field:Array<Array<Block>>,direction:Int,maxBeforeMerge:Int):Int{
         val ground = Array(n){LinkedList<Block>()}
         var mergedMax = 0
@@ -119,29 +119,25 @@ fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
         return kotlin.math.max(mergedMax,maxBeforeMerge)
     }
 
-    fun dfs(depth:Int){
-        if(depth==5){
-            var currentMax = 0
-            val field = Array(n){y->
-                Array(n){x->
-                    originalField[y][x].also { currentMax = it.weight.coerceAtLeast(currentMax) }
-                }
-            }
-
-            for(i in 0..4){
-                if(currentMax.toDouble()*2.0.pow(5-i)>maxWeight) currentMax = setGravity(field,command[i],currentMax).also {
-                    maxWeight = it.coerceAtLeast(maxWeight)
-                }
-                else break
-            }
-        }
+    fun dfs(depth:Int,field:Array<Array<Block>>){
+        if(depth==5) return
         else{
             for(i in 0..3){
-                command[depth] = i
-                dfs(depth+1)
+                var currentMax = 0
+                val clone = Array(n){y->
+                    Array(n){x->
+                        field[y][x].also { currentMax = it.weight.coerceAtLeast(currentMax) }
+                    }
+                }
+                // 가능성이 있을 시에만 추가조작
+                if(currentMax.toDouble()*2.0.pow(5-depth)>maxWeight) {
+                    currentMax = setGravity(clone,i,currentMax)
+                    maxWeight = currentMax.coerceAtLeast(maxWeight)
+                    dfs(depth+1,clone)
+                }
             }
         }
     }
-    dfs(0)
+    dfs(0,originalField)
     print(maxWeight)
 }
