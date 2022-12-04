@@ -1,7 +1,9 @@
 fun main(){
-    println("400000 400000 10000")
-    for(i in 0 until 100000) print("$i ")
-    println("")
-    for(i in 0 until 10000) print("$i ")
-    //for(i in 0 until 107397) print("$i ")
+    println("100 100 9900")
+    for(i in 1..100) println("$i 2 1 3 ${9901-i}")
+    var i = 100
+    for(x in 3..100) for(y in 1..100){
+        i++
+        println("$y $x 1 3 ${9901-i}")
+    }
 }
