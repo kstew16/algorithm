@@ -1,9 +1,80 @@
-fun main(){
-    println("1000 1000")
-    val sb = StringBuilder("")
-    repeat(1000){
-        repeat(1000){sb.append(0)}
-        sb.append("\n")
+import kotlin.math.ceil
+import kotlin.math.log
+
+val br = System.`in`.bufferedReader()
+val bw = System.out.bufferedWriter()
+var n = 0
+var k = 0
+lateinit var tree: Array<MutableList<Int>>
+lateinit var parent: Array<IntArray>
+lateinit var depths: IntArray
+lateinit var visited: BooleanArray
+
+fun main() {
+    n = br.readLine().toInt()
+    k = ceil(log(n.toDouble(), 2.0)).toInt()
+    tree = Array(n + 1) { mutableListOf() }
+    parent = Array(n + 1) { IntArray(k + 1) }
+    depths = IntArray(n + 1)
+    visited = BooleanArray(n + 1) { false }
+    for(i in 0 until n - 1) {
+        val (a, b) = br.readLine().split(' ').map { it.toInt() }
+        tree[a].add(b)
+        tree[b].add(a)
     }
-    print(sb)
+    dfs(1, 1, 0)
+
+    for(j in 1 ..k) {
+        for(i in 1..n) {
+            parent[i][j] = parent[parent[i][j - 1]][j - 1]
+        }
+    }
+
+    val m = br.readLine().toInt()
+    repeat(m) {
+        val (a, b) = br.readLine().split(' ').map { it.toInt() }
+        bw.write("${lca(a, b)}\n")
+    }
+
+    bw.flush()
+    bw.close()
+}
+
+fun dfs(curr: Int, prev: Int, depth: Int) {
+    visited[curr] = true
+    depths[curr] = depth
+    parent[curr][0] = prev
+    for(i in tree[curr].indices) {
+        if(!visited[tree[curr][i]]) {
+            dfs(tree[curr][i], curr, depth + 1)
+        }
+    }
+}
+
+fun lca(a: Int, b: Int): Int {
+    var nodeA = a
+    var nodeB = b
+
+    // nodeB가 항상 더 깊은 곳에 있도록
+    if(depths[nodeA] > depths[nodeB]) {
+        val tmp = nodeA
+        nodeA = nodeB
+        nodeB = tmp
+    }
+
+    for(i in k downTo 0) {
+        val diff = depths[nodeB] - depths[nodeA]
+        if(diff >= (1 shl i)) nodeB = parent[nodeB][i]
+    }
+
+    if(nodeA == nodeB) return nodeA
+
+    for(i in k downTo 0) {
+        if(parent[nodeA][i] != parent[nodeB][i]) {
+            nodeA = parent[nodeA][i]
+            nodeB = parent[nodeB][i]
+        }
+    }
+
+    return parent[nodeA][0]
 }
