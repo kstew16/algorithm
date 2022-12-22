@@ -1,6 +1,6 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
+// 1.이분탐색으로 찾는데 '답이 없는 경우' 와 '조건이 여러개여서 조건에 따라 범위이동을 다르게 해야 하는 경우' 를 처리 못 해서 런타임에러
 fun main():Unit = with(BufferedReader(InputStreamReader(System.`in`))){
     val (n,k) = readLine().split(" ").map { it.toInt() }
     val inputDigits = readLine().map { it.digitToInt() }
