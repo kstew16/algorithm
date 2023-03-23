@@ -70,6 +70,15 @@ fun main(){
                                     possibleState[newCost] = newReward
                                 }
                             }
+                            val newCost = curCost + rCost + lCost
+                            val newReward = curReward + lReward + rReward
+                            if(optimumCostOf[newReward]==null){
+                                optimumCostOf[newReward] = newCost
+                                possibleState[newCost] = newReward
+                            }else if(optimumCostOf[newReward]!!>newCost){
+                                optimumCostOf[newReward] = newCost
+                                possibleState[newCost] = newReward
+                            }
                         }
                     }
                 }
