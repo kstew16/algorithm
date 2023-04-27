@@ -1,31 +1,29 @@
-import java.util.PriorityQueue
-
+import java.util.*
 fun main(){
     class Solution {
         fun solution(operations: Array<String>): IntArray {
-            val pqAscending = PriorityQueue<Int>()
-            val pqDescending = PriorityQueue<Int>{a,b-> if(a>b)-1 else 1}
-            for(i in operations.indices){
-                val (opData,inputNumStr) = operations[i].split(" ")
-                val inputNum = inputNumStr.toInt()
-                when(opData){
-                    "D"->{
-                        if(pqDescending.isNotEmpty()){
-                            if(inputNum>0) pqAscending.remove(pqDescending.poll())
-                            else pqDescending.remove(pqAscending.poll())
-                        }
-                    }
-                    "I"->{
-                        pqAscending.add(inputNum)
-                        pqDescending.add(inputNum)
+            var s = 0
+            val minPQ = PriorityQueue<Int>()
+            val maxPQ = PriorityQueue<Int>{a,b-> if(a>b)-1 else 1}
+            operations.map{it.split(" ")}.forEach{(cmdType,numString)->
+                val num = numString.toInt()
+                if(cmdType=="I"){
+                    s++
+                    minPQ.add(num)
+                    maxPQ.add(num)
+                }else{
+                    if(s>0) s--
+                    if(num<0){// 최솟값 삭제
+                        val removed = minPQ.poll()
+                        maxPQ.remove(removed)
+                    }else{
+                        val removed = maxPQ.poll()
+                        minPQ.remove(removed)
                     }
                 }
             }
-
-            return if(pqDescending.isEmpty()) intArrayOf(0,0)
-            else intArrayOf(pqDescending.peek(),pqAscending.peek())
+            return if(s==0) intArrayOf(0,0)
+            else intArrayOf(maxPQ.poll(),minPQ.poll())
         }
     }
-    print(Solution().solution(arrayOf("I 10", "I 20", "D 1", "I 30", "I 40", "D -1", "D -1" )).joinToString(" "))
-
 }
