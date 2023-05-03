@@ -1,11 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9b11ab12-4211-465f-b654-ca47cf7b4d61" name="Default Changelist" comment="" />
+    <list default="true" id="9b11ab12-4211-465f-b654-ca47cf7b4d61" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/boj/네트워크.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/algorithm.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/algorithm.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/10844.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/10844.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/10972.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/10972.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/10972_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/10972_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11052.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11052.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11053.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11053.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11054.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11054.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11055.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11055.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11057.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11057.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1107.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1107.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11272.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11272.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11399.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11399.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1149.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1149.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11722.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11722.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/11726.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/11726.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1309.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1309.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/13305.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/13305.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/13398.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/13398.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/13_RomanToInteger.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/13_RomanToInteger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1436.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1436.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/14500_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/14500_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/14501.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/14501.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/14501_Brute.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/14501_Brute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1476.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1476.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/14889.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/14889.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/14889_py.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/14889_py.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1541.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1541.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15649.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15649.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15649_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15649_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15650.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15650.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15651.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15651.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15652.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15652.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15654.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15654.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15655.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15655.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15656.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15656.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15663.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15663.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15664.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15664.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15665.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15665.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15666.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15666.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15988.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15988.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/15990.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/15990.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/16194.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/16194.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1699.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1699.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/17404.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/17404.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1748.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1748.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1759.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1759.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1912.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1912.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1931.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1931.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1932.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1932.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/1dList.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/1dList.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/2133.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/2133.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/2156.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/2156.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/2193.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/2193.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/2225.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/2225.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/2309.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/2309.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/2529.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/2529.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/2529_faster.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/2529_faster.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/3085.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/3085.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/3085_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/3085_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/4153.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/4153.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/6064.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/6064.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/6064_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/6064_2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/9095.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/9095.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/9465.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/9465.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/9_palindrome.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/9_palindrome.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/dijkstra.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/dijkstra.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/fordfulkerson.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/fordfulkerson.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/inputGen.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/inputGen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/lecture.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/lecture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/leet.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/leet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boj/maxflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/boj/introduction/maxflow.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -19,6 +101,46 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Nunu\Desktop\dev\algorithm\boj\introduction" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="네트워크" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="algorithm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/boj" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/boj/네트워크.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.네트워크" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -29,10 +151,25 @@
       <option name="presentableId" value="Default" />
       <updated>1656858746085</updated>
       <workItem from="1656858747791" duration="183000" />
+      <workItem from="1682742950714" duration="965000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/algorithm$.coverage" NAME="네트워크 Coverage Results" MODIFIED="1682743312092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/boj" />
   </component>
 </project>
