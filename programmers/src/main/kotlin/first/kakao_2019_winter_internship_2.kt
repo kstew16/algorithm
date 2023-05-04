@@ -29,13 +29,13 @@ fun main(){
             }
 
             fun markBanCase(depth:Int,bannedList:Int){
-                if((depth >= banned_id.size)){
-                    if(!caseVisited[bannedList]) {
+                if((depth >= banned_id.size)){ // 모든 밴아이디가 밴을 진행한 경우
+                    if(!caseVisited[bannedList]) { // 그 배닝케이스가 없으면 마크
                         caseVisited[bannedList] = true
                         answer++
                     }
                 }else {
-                    map[depth].forEach {
+                    map[depth].forEach { // DFS 식으로 bannedId 마다 갈 수 있는 곳을 방문
                         if(!bannedList.chk(it)){
                             markBanCase(depth + 1, bannedList.on(it))
                         }
