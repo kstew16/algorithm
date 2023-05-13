@@ -1,6 +1,13 @@
 
 import java.util.*
 fun main(){
+    // 와 타당성 못할만 했네
+    // 이거 경우의 수 표 아래랑 같음 25면 32조야
+    /*
+    1 1 1
+    1 2 3
+    1 3 6
+    * */
     data class CurWay(val cy:Int,val cx:Int,val curCost:Int,val wasHorizontal:Boolean)
     class Solution {
         fun solution(board: Array<IntArray>): Int {
