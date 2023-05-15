@@ -2,7 +2,7 @@ package first
 
 // 항상 가장 빨리 끝나는 테이블만 찾아서 가면
 fun main(){
-    data class Officer(val ability:Int, var taskWillFinish:Long)
+    //data class Officer(val ability:Int, var taskWillFinish:Long)
     class Solution {
         fun solution(n: Int, times: IntArray): Long {
             fun enableToProcessIn(n:Int,minutes:Long,times:IntArray):Boolean{
