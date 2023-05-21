@@ -1,6 +1,5 @@
 package first
 
-import java.lang.Integer.max
 import java.util.PriorityQueue
 
 fun main(){
@@ -76,7 +75,7 @@ fun main(){
                 else{
                     map[cur.nodeNum].forEach { (dest,cost) ->
                         // 현재 경로의 난이도와 새로운 간선의 난이도중 높은 것을 새 난이도로 설정
-                        val newIntensity = max(cur.intensity,cost)
+                        val newIntensity = kotlin.math.max(cur.intensity,cost)
                         // 새 경로가 원래 알던 코스보다 난이도 낮은 경로를 탐색하는 경우에만 해당 루트를 pq에 편입
                         if(intensityTo[dest]>newIntensity){
                             intensityTo[dest] = newIntensity
