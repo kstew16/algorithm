@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class rank {
     class Solution{
+        // 코로나 걸려서 머리가 안 돌아가!!
         // 변수 클래스 내 공유는 이렇게
         // 이중배열 선언시 초기화 까먹지 않도록
         ArrayList<Integer>[] parent;
